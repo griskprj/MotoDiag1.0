@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Riders - Вход</title>
+    <link rel="stylesheet" href="/app/static/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Apex Riders</h1>
+            <p>Войдите в свой аккаунт</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Логин" required>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Пароль" required>
+            </div>
+            
+            <div class="options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Запомнить меня</label>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#">Забыли пароль?</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-btn">Войти</button>
+            
+            <div class="register-link">
+                <p>Нет аккаунта? <a href="#">Зарегистрироваться</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="/app/static/js/login.js"></script>
+</body>
+</html>

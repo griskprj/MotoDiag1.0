@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Riders - Регистрация</title>
+    <link rel="stylesheet" href="/app/static/css/register.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">
+            <h1>Apex Riders</h1>
+            <p>Создайте новый аккаунт</p>
+        </div>
+        
+        <form id="registerForm">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Логин" required>
+                <div class="error-message" id="username-error">Логин должен содержать от 4 до 20 символов</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" required>
+                <div class="error-message" id="email-error">Введите корректный email</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Пароль" required>
+                <div class="error-message" id="password-error">Пароль должен содержать минимум 8 символов</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="confirm-password" placeholder="Подтверждение пароля" required>
+                <div class="error-message" id="confirm-password-error">Пароли не совпадают</div>
+            </div>
+            
+            <div class="privacy-policy">
+                <input type="checkbox" id="privacy" required>
+                <label for="privacy">Я согласен с <a href="#">политикой конфиденциальности</a> и <a href="#">условиями обработки персональных данных</a></label>
+            </div>
+            
+            <button type="submit" class="register-btn">Зарегистрироваться</button>
+            
+            <div class="login-link">
+                <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="/app/static/js/register.js"></script>
+</body>
+</html>
