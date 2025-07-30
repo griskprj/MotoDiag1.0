@@ -59,6 +59,74 @@ body {
     margin-top: 5px;
 }
 
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.burger-menu span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-color);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* Модифицируем навигацию для мобильных */
+.header-nav {
+    transition: all 0.3s ease;
+}
+
+.nav-list {
+    display: flex;
+    list-style-type: none;
+    gap: 15px;
+}
+
+/* Стили для активного бургер-меню */
+.burger-menu.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.burger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+.header-nav.active {
+    transform: translateX(0);
+}
+
+.header-nav {
+    display: flex;
+    list-style-type: none;
+    gap: 15px;
+}
+
+.header-link {
+    text-decoration: none;
+    color: #aaa;
+    font-weight: 400;
+    transition: 0.5s;
+}
+.header-link:hover {
+    color: #fff;
+}
+
+.active {
+    color: #fff;
+    font-weight: 500;
+}
+
 .user-menu {
     display: flex;
     align-items: center;
@@ -231,6 +299,28 @@ body {
     opacity: 0.8;
 }
 
+.card-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.weather-icon svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.weather-icon.cloudy svg {
+    stroke-width: 1.5;
+}
+
 /* Events Section */
 .events-section {
     background: var(--card-color);
@@ -330,6 +420,7 @@ body {
     background: var(--card-color);
     border-radius: 15px;
     padding: 30px;
+    margin-bottom: 50px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--accent-color);
@@ -404,6 +495,27 @@ body {
     background: var(--highlight-color);
 }
 
+.footer-items {
+    display: flex;
+    justify-content: center;
+}
+
+.footer-nav {
+    display: flex;
+    list-style-type: none;
+    gap: 20px;
+}
+
+.footer-li {
+    text-decoration: none;
+    color: #aaa;
+
+    transition: 0.5s;
+}
+.footer-li:hover {
+    color: #fff;
+}
+
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
@@ -417,6 +529,33 @@ body {
 
     .community-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .burger-menu {
+        display: flex;
+    }
+    
+    .header-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: var(--primary-color);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        padding: 80px 30px 30px;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        z-index: 99;
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        gap: 25px;
+    }
+    
+    .header-nav.active {
+        right: 0;
     }
 }
 
