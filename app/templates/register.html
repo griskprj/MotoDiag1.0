@@ -14,24 +14,33 @@
         </div>
         
         <form id="registerForm">
+            {{ form.hidden_tag() }}
             <div class="input-group">
-                <input type="text" id="username" placeholder="Логин" required>
-                <div class="error-message" id="username-error">Логин должен содержать от 4 до 20 символов</div>
+                {{ form.username(placeholder="Логин", class="form-control") }}
+                <div class="error-message" id="username-error">
+                    {% if form.username.errors %}{{ form.username.errors[0] }}{% endif %}
+                </div>
             </div>
             
             <div class="input-group">
-                <input type="email" id="email" placeholder="Email" required>
-                <div class="error-message" id="email-error">Введите корректный email</div>
+                {{ form.email(placeholder="Email", class="form-control") }}
+                <div class="error-message" id="email-error">
+                    {% if form.email.errors %}{{ form.email.errors[0] }}{% endif %}
+                </div>
             </div>
             
             <div class="input-group">
-                <input type="password" id="password" placeholder="Пароль" required>
-                <div class="error-message" id="password-error">Пароль должен содержать минимум 8 символов</div>
+                {{ form.password(placeholder="Password", class="form-control") }}
+                <div class="error-message" id="password-error">
+                    {% if form.password.errors %}{{ form.password.errors[0] }}{% endif %}
+                </div>
             </div>
             
             <div class="input-group">
-                <input type="password" id="confirm-password" placeholder="Подтверждение пароля" required>
-                <div class="error-message" id="confirm-password-error">Пароли не совпадают</div>
+                {{ form.confirm-password(placeholder="Confirm Password", class="form-control") }}
+                <div class="error-message" id="confirm-password-error">
+                    {% if form.confirm-password.errors %}{{ form.confirm-password.errors[0] }}{% endif %}
+                </div>
             </div>
             
             <div class="privacy-policy">

@@ -24,12 +24,19 @@
         {% endwith %}
         
         <form method="POST" action="{{ url_for('auth.login') }}"" id="loginForm">
+            {{ form.hidden_tag() }}
             <div class="input-group">
-                {{ form.username(placeholder="Логин") }}
+                {{ form.username(placeholder="Логин", class="form-control") }}
+                {% if form.username.errors %}
+                    <div class="error-message">{{ form.username.errors[0] }}</div>
+                {% endif %}
             </div>
             
             <div class="input-group">
-                <input type="password" id="password" placeholder="Пароль" required>
+                {{ form.password(placeholder="Пароль", class="form-control") }}
+                {% if form.password.errors %}
+                    <div class="error-message">{{ form.password.errors[0] }}</div>
+                {% endif %}
             </div>
             
             <div class="options">

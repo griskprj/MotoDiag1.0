@@ -1,32 +1,29 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[
+    username = StringField('Логин', validators=[
         DataRequired(),
-        Length(min=4, max=20)
+        Length(min=4, max=20, message='Логин должен быть от 4 до 20 символов')
     ])
     email = StringField('Email', validators=[
-        DataRequired,
-        Email()
+        DataRequired(), 
+        Email(message='Некорректный email')
     ])
-    password = PasswordField('Password', validators=[
+    password = PasswordField('Пароль', validators=[
         DataRequired(),
-        Length(min=6)
+        Length(min=8, message='Пароль должен быть не менее 8 символов')
     ])
-    confirm_password = PasswordField('Confirm Password', validators=[
+    confirm_password = PasswordField('Подтвердите пароль', validators=[
         DataRequired(),
-        EqualTo('password', message='Пароли должны совпадать!')
+        EqualTo('password', message='Пароли не совпадают')
     ])
-    submit = SubmitField('SignUp')
+    privacy = BooleanField('Я согласен с политикой', validators=[DataRequired()])
+    submit = SubmitField('Зарегистрироваться')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[
-        DataRequired(),
-        Email()
-    ])
-    password = PasswordField('Password', validators=[
-        DataRequired()
-    ])
-    submit = SubmitField('Login')
+    username = StringField('Логин', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    remember = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')
