@@ -127,26 +127,66 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
     
     // Обновление погоды
-    function updateWeather() {
-        const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
-        
-        // Анимация изменения
-        weatherIcon.style.opacity = '0';
-        setTimeout(() => {
-            weatherIcon.innerHTML = randomWeather.icon;
-            weatherIcon.className = randomWeather.class;
-            weatherIcon.style.opacity = '1';
+    async function updateWeather() {
+        try {
+            const response = await fetch('/api/weather');
+            if (!response.ok) throw new Error('Weather fetch failed');
             
+            const weatherData = await response.json();
+            
+            // Анимация изменения
+            weatherIcon.style.opacity = '0';
+            setTimeout(() => {
+                // Установите соответствующую иконку в зависимости от погоды
+                setWeatherIcon(weatherData.condition);
+                
+                weatherTemp.textContent = `${weatherData.temp}, ${weatherData.condition}`;
+                weatherAdvice.textContent = weatherData.advice;
+                weatherIcon.style.opacity = '1';
+            }, 300);
+        } catch (error) {
+            console.error('Error fetching weather:', error);
+            // Можно оставить fallback на случай ошибки
+            const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
+            weatherIcon.innerHTML = randomWeather.icon;
             weatherTemp.textContent = `${randomWeather.temp}, ${randomWeather.desc}`;
             weatherAdvice.textContent = randomWeather.advice;
-        }, 300);
+        }
     }
-    
-    // Клик по иконке погоды для ручного обновления
-    weatherIcon.addEventListener('click', function(e) {
-        e.preventDefault();
-        updateWeather();
-    });
+    function setWeatherIcon(condition) {
+        // Упрощенная логика - можно расширить
+        if (condition.toLowerCase().includes('дождь')) {
+            weatherIcon.innerHTML = `
+                <path d="M16 13v8"/>
+                <path d="M8 13v8"/>
+                <path d="M12 15v8"/>
+                <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
+            `;
+            weatherIcon.className = 'rainy';
+        } else if (condition.toLowerCase().includes('облачно')) {
+            weatherIcon.innerHTML = `
+                <path d="M18 10h-1a4 4 0 0 0-4 4v1"/>
+                <path d="M6 10H5a4 4 0 0 0-4 4v1"/>
+                <path d="M8 15a5 5 0 0 1 8 0"/>
+                <path d="M16 15a5 5 0 0 1 5 5H3a5 5 0 0 1 5-5"/>
+            `;
+            weatherIcon.className = 'cloudy';
+        } else {
+            // По умолчанию солнечно
+            weatherIcon.innerHTML = `
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2"/>
+                <path d="M12 20v2"/>
+                <path d="m4.93 4.93 1.41 1.41"/>
+                <path d="m17.66 17.66 1.41 1.41"/>
+                <path d="M2 12h2"/>
+                <path d="M20 12h2"/>
+                <path d="m6.34 17.66-1.41 1.41"/>
+                <path d="m19.07 4.93-1.41 1.41"/>
+            `;
+            weatherIcon.className = 'sunny';
+        }
+    }
 
     // ==================== КАРТОЧКИ ДАШБОРДА ====================
     const dashboardCards = document.querySelectorAll('.dashboard-card');

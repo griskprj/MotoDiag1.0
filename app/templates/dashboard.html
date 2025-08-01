@@ -50,7 +50,7 @@
 
         <!-- Welcome Section -->
         <section class="welcome-section">
-            <h2>Добро пожаловать, Райдер!</h2>
+            <h2>Добро пожаловать, {{ user.username }}!</h2>
             <p>Сегодня отличный день для поездки. Проверьте предстоящие события, найдите новых участников для совместных заездов или спланируйте новый маршрут.</p>
             
             <div class="weather-info">
@@ -89,21 +89,6 @@
                 </div>
                 <p>У вас 5 сохраненных маршрутов. Последний добавлен 3 дня назад.</p>
                 <button class="event-btn" style="margin-top: 15px;">Просмотреть все</button>
-            </div>
-            
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>Активность</h3>
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 12h-4l-3 9l-9 -3l-3 -9h-4"></path>
-                            <path d="M6 16l6 -2l6 2"></path>
-                            <circle cx="12" cy="7" r="6"></circle>
-                        </svg>
-                    </div>
-                </div>
-                <p>В этом месяце вы проехали 8 раз. Ваша текущая серия: 3 дня подряд.</p>
-                <button class="event-btn" style="margin-top: 15px;">Подробнее</button>
             </div>
             
             <div class="dashboard-card">
