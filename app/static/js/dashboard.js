@@ -59,133 +59,91 @@ document.addEventListener('DOMContentLoaded', function() {
         notificationBadge.style.display = 'none';
     });
 
-    // ==================== ПОГОДА ====================
-    const weatherIcon = document.querySelector('.weather-icon svg');
-    const weatherTemp = document.querySelector('.weather-info p:first-child');
-    const weatherAdvice = document.querySelector('.weather-info p:last-child');
-    
-    // Конфигурация погоды
-    const weatherConditions = [
-        { 
-            temp: "+18°C", 
-            desc: "солнечно", 
-            advice: "Идеальная погода для поездки",
-            icon: `
-                <circle cx="12" cy="12" r="4"/>
-                <path d="M12 2v2"/>
-                <path d="M12 20v2"/>
-                <path d="m4.93 4.93 1.41 1.41"/>
-                <path d="m17.66 17.66 1.41 1.41"/>
-                <path d="M2 12h2"/>
-                <path d="M20 12h2"/>
-                <path d="m6.34 17.66-1.41 1.41"/>
-                <path d="m19.07 4.93-1.41 1.41"/>
-            `,
-            class: 'sunny'
-        },
-        { 
-            temp: "+12°C", 
-            desc: "облачно", 
-            advice: "Возьмите ветровку",
-            icon: `
-                <path d="M18 10h-1a4 4 0 0 0-4 4v1"/>
-                <path d="M6 10H5a4 4 0 0 0-4 4v1"/>
-                <path d="M8 15a5 5 0 0 1 8 0"/>
-                <path d="M16 15a5 5 0 0 1 5 5H3a5 5 0 0 1 5-5"/>
-            `,
-            class: 'cloudy'
-        },
-        { 
-            temp: "+22°C", 
-            desc: "ясно", 
-            advice: "Отличный день для длинной поездки",
-            icon: `
-                <circle cx="12" cy="12" r="4"/>
-                <path d="M12 2v2"/>
-                <path d="M12 20v2"/>
-                <path d="m4.93 4.93 1.41 1.41"/>
-                <path d="m17.66 17.66 1.41 1.41"/>
-                <path d="M2 12h2"/>
-                <path d="M20 12h2"/>
-                <path d="m6.34 17.66-1.41 1.41"/>
-                <path d="m19.07 4.93-1.41 1.41"/>
-            `,
-            class: 'clear'
-        },
-        { 
-            temp: "+8°C", 
-            desc: "дождь", 
-            advice: "Будьте осторожны на дороге",
-            icon: `
-                <path d="M16 13v8"/>
-                <path d="M8 13v8"/>
-                <path d="M12 15v8"/>
-                <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
-            `,
-            class: 'rainy'
-        }
-    ];
-    
-    // Обновление погоды
-    async function updateWeather() {
+    // ==================== ПОГОДА (WeatherAPI) ====================
+    const weatherIcon = document.getElementById('weather-icon');
+    const weatherTemp = document.getElementById('weather-temp');
+    const weatherCondition = document.getElementById('weather-condition');
+    const weatherAdvice = document.getElementById('weather-advice');
+    const refreshBtn = document.getElementById('weather-refresh');
+    const cityInput = document.getElementById('weather-city-input');
+
+    // Советы для разных погодных условий
+    const weatherAdvices = {
+        'sunny': 'Идеальная погода для поездки!',
+        'clear': 'Отличный день для длинного заезда',
+        'cloudy': 'Возможно, стоит надеть ветровку',
+        'rain': 'Будьте осторожны на мокрой дороге',
+        'snow': 'Не рекомендуем выезжать без необходимости',
+        'fog': 'Видимость ограничена, будьте внимательны'
+    };
+
+    // Получение погоды с WeatherAPI
+    async function fetchWeather(city = 'Sochi') {
         try {
-            const response = await fetch('/api/weather');
-            if (!response.ok) throw new Error('Weather fetch failed');
+            const response = await fetch(`/get_weather?city=${encodeURIComponent(city)}`);
+            const data = await response.json();
             
-            const weatherData = await response.json();
+            if (data.error) throw new Error(data.error);
             
-            // Анимация изменения
-            weatherIcon.style.opacity = '0';
-            setTimeout(() => {
-                // Установите соответствующую иконку в зависимости от погоды
-                setWeatherIcon(weatherData.condition);
-                
-                weatherTemp.textContent = `${weatherData.temp}, ${weatherData.condition}`;
-                weatherAdvice.textContent = weatherData.advice;
-                weatherIcon.style.opacity = '1';
-            }, 300);
+            updateWeatherUI(data);
+            saveCityToLocalStorage(city);
         } catch (error) {
-            console.error('Error fetching weather:', error);
-            // Можно оставить fallback на случай ошибки
-            const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
-            weatherIcon.innerHTML = randomWeather.icon;
-            weatherTemp.textContent = `${randomWeather.temp}, ${randomWeather.desc}`;
-            weatherAdvice.textContent = randomWeather.advice;
+            console.error('Ошибка получения погоды:', error);
+            weatherTemp.textContent = 'Ошибка загрузки';
+            weatherCondition.textContent = '';
+            weatherAdvice.textContent = '';
         }
     }
-    function setWeatherIcon(condition) {
-        // Упрощенная логика - можно расширить
-        if (condition.toLowerCase().includes('дождь')) {
-            weatherIcon.innerHTML = `
-                <path d="M16 13v8"/>
-                <path d="M8 13v8"/>
-                <path d="M12 15v8"/>
-                <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
-            `;
-            weatherIcon.className = 'rainy';
-        } else if (condition.toLowerCase().includes('облачно')) {
-            weatherIcon.innerHTML = `
-                <path d="M18 10h-1a4 4 0 0 0-4 4v1"/>
-                <path d="M6 10H5a4 4 0 0 0-4 4v1"/>
-                <path d="M8 15a5 5 0 0 1 8 0"/>
-                <path d="M16 15a5 5 0 0 1 5 5H3a5 5 0 0 1 5-5"/>
-            `;
-            weatherIcon.className = 'cloudy';
-        } else {
-            // По умолчанию солнечно
-            weatherIcon.innerHTML = `
-                <circle cx="12" cy="12" r="4"/>
-                <path d="M12 2v2"/>
-                <path d="M12 20v2"/>
-                <path d="m4.93 4.93 1.41 1.41"/>
-                <path d="m17.66 17.66 1.41 1.41"/>
-                <path d="M2 12h2"/>
-                <path d="M20 12h2"/>
-                <path d="m6.34 17.66-1.41 1.41"/>
-                <path d="m19.07 4.93-1.41 1.41"/>
-            `;
-            weatherIcon.className = 'sunny';
-        }
+
+    // Обновление интерфейса с данными о погоде
+    function updateWeatherUI(data) {
+        weatherTemp.textContent = `${data.temp}°C, ${data.condition}`;
+        weatherCondition.textContent = `Влажность: ${data.humidity}% | Ветер: ${data.wind} км/ч`;
+        weatherIcon.src = data.icon.startsWith('//') ? `https:${data.icon}` : data.icon;
+        
+        // Определяем совет по погоде
+        const conditionKey = data.condition.toLowerCase();
+        let advice = 'Подходящая погода для поездки';
+        
+        if (conditionKey.includes('дождь')) advice = weatherAdvices['rain'];
+        else if (conditionKey.includes('снег')) advice = weatherAdvices['snow'];
+        else if (conditionKey.includes('туман')) advice = weatherAdvices['fog'];
+        else if (conditionKey.includes('облач')) advice = weatherAdvices['cloudy'];
+        else if (conditionKey.includes('ясно')) advice = weatherAdvices['clear'];
+        else if (conditionKey.includes('солн')) advice = weatherAdvices['sunny'];
+        
+        weatherAdvice.textContent = advice;
+    }
+
+    // Сохранение города в localStorage
+    function saveCityToLocalStorage(city) {
+        localStorage.setItem('preferredCity', city);
+    }
+
+    // Загрузка города из localStorage
+    function loadCityFromLocalStorage() {
+        return localStorage.getItem('preferredCity') || 'Moscow';
+    }
+
+    // Инициализация погоды
+    function initWeather() {
+        const defaultCity = loadCityFromLocalStorage();
+        cityInput.value = defaultCity;
+        fetchWeather(defaultCity);
+        
+        // Обновление по кнопке
+        refreshBtn.addEventListener('click', () => {
+            const city = cityInput.value.trim() || 'Moscow';
+            fetchWeather(city);
+        });
+        
+        // Обновление по Enter
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const city = cityInput.value.trim() || 'Moscow';
+                fetchWeather(city);
+            }
+        });
     }
 
     // ==================== КАРТОЧКИ ДАШБОРДА ====================
@@ -203,6 +161,41 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.boxShadow = '0 8px 32px var(--shadow-color)';
         });
     });
+
+    // ==================== ОСНОВНОЙ МОТОЦИКЛ ====================
+    const bikeStatusSelect = document.getElementById('bike-status');
+
+    if (bikeStatusSelect) {
+        // Загрузка сохраненного статуса из localStorage
+        const savedStatus = localStorage.getItem('primaryBikeStatus');
+        if (savedStatus) {
+            bikeStatusSelect.value = savedStatus;
+        }
+        
+        // Сохранение статуса при изменении
+        bikeStatusSelect.addEventListener('change', function() {
+            localStorage.setItem('primaryBikeStatus', this.value);
+            
+            // Визуальная обратная связь
+            const statusText = this.options[this.selectedIndex].text;
+            const originalText = this.nextElementSibling?.textContent;
+            
+            if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('status-feedback')) {
+                const feedback = document.createElement('span');
+                feedback.className = 'status-feedback';
+                feedback.textContent = `Статус изменен на: ${statusText}`;
+                feedback.style.marginLeft = '10px';
+                feedback.style.fontSize = '0.8rem';
+                feedback.style.opacity = '0.8';
+                this.parentNode.insertBefore(feedback, this.nextSibling);
+                
+                setTimeout(() => {
+                    feedback.style.opacity = '0';
+                    setTimeout(() => feedback.remove(), 300);
+                }, 2000);
+            }
+        });
+    }
 
     // ==================== СОБЫТИЯ ====================
     const eventItems = document.querySelectorAll('.event-item');
@@ -260,20 +253,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function init() {
         // Первоначальная загрузка данных
         updateNotifications();
-        updateWeather();
+        initWeather(); // Инициализация погоды
         
         // Установка интервалов обновления
-        setInterval(updateWeather, 300000); // Каждые 5 минут
         setInterval(updateNotifications, 600000); // Каждые 10 минут
+        setInterval(() => fetchWeather(cityInput.value || loadCityFromLocalStorage()), 3600000); // Каждый час
         
         // Имитация активности сообщества
         setInterval(() => {
             const activeCount = Math.floor(Math.random() * 5) + 1;
-            document.querySelector('.dashboard-card:nth-child(3) p').textContent = 
+            document.querySelector('.dashboard-card:nth-child(2) p').textContent = 
                 `В вашем кругу 12 райдеров. ${activeCount} из них активны прямо сейчас.`;
         }, 10000);
     }
-    
-    // Запуск инициализации
-    init();
+    init()
 });

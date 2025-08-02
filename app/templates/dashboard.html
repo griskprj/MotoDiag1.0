@@ -51,25 +51,20 @@
         <!-- Welcome Section -->
         <section class="welcome-section">
             <h2>Добро пожаловать, {{ user.username }}!</h2>
-            <p>Сегодня отличный день для поездки. Проверьте предстоящие события, найдите новых участников для совместных заездов или спланируйте новый маршрут.</p>
+            <p>Проверьте предстоящие события, найдите новых участников для совместных заездов или спланируйте новый маршрут.</p>
             
             <div class="weather-info">
                 <div class="weather-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <path d="M12 2v2"></path>
-                        <path d="M12 20v2"></path>
-                        <path d="m4.93 4.93 1.41 1.41"></path>
-                        <path d="m17.66 17.66 1.41 1.41"></path>
-                        <path d="M2 12h2"></path>
-                        <path d="M20 12h2"></path>
-                        <path d="m6.34 17.66-1.41 1.41"></path>
-                        <path d="m19.07 4.93-1.41 1.41"></path>
-                    </svg>
+                    <img id="weather-icon" src="" alt="Weather Icon">
                 </div>
-                <div>
-                    <p>+18°C, солнечно</p>
-                    <p>Идеальная погода для поездки</p>
+                <div class="weather-details">
+                    <p id="weather-temp">Загрузка...</p>
+                    <p id="weather-condition"></p>
+                    <p id="weather-advice"></p>
+                </div>
+                <div class="weather-controls">
+                    <input type="text" id="weather-city-input" placeholder="Изменить город">
+                    <button id="weather-refresh">⟳</button>
                 </div>
             </div>
         </section>
@@ -107,6 +102,36 @@
                 <button class="event-btn" style="margin-top: 15px;">Найти райдеров</button>
             </div>
         </div>
+
+        <!-- Moto Section -->
+        <section class="primary-bike-section">
+            <h2>Основной мотоцикл</h2>
+            
+            <div class="primary-bike-card">
+                <div class="bike-image">
+                    <img src="https://via.placeholder.com/300x200?text=Yamaha+MT-09" alt="Yamaha MT-09">
+                </div>
+                <div class="bike-info">
+                    <h3>Yamaha MT-09</h3>
+                    <div class="bike-specs">
+                        <span class="spec"><strong>Объем:</strong> 890cc</span>
+                        <span class="spec"><strong>Год:</strong> 2022</span>
+                        <span class="spec"><strong>Пробег:</strong> 12,450 км</span>
+                    </div>
+                    <div class="bike-status">
+                        <label for="bike-status">Статус:</label>
+                        <select id="bike-status" class="status-select">
+                            <option value="in-garage">В гараже</option>
+                            <option value="more-use">Основной</option>
+                            <option value="using" selected>Использую</option>
+                            <option value="repair">На ремонте</option>
+                            <option value="selling">Продаю</option>
+                        </select>
+                        <a class="more-btn" href="#">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Events Section -->
         <section class="events-section">

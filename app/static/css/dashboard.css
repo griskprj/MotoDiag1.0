@@ -222,11 +222,61 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 12px;
     margin-top: 20px;
+    position: relative;
 }
 
-.weather-icon {
-    font-size: 2rem;
+.weather-icon img {
+    width: 50px;
+    height: 50px;
+}
+
+.weather-details {
+    flex-grow: 1;
+}
+
+.weather-details p {
+    margin: 3px 0;
+    font-size: 0.9rem;
+}
+
+.weather-details p:first-child {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.weather-controls {
+    display: flex;
+    gap: 5px;
+}
+
+#weather-city-input {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 120px;
+}
+
+#weather-refresh {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#weather-refresh:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* Dashboard Grid */
@@ -319,6 +369,117 @@ body {
 }
 .weather-icon.cloudy svg {
     stroke-width: 1.5;
+}
+
+/* Moto Section */
+/* Добавьте эти стили в dashboard.css */
+.primary-bike-section {
+    background: var(--card-color);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.primary-bike-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #fff, #aaa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.primary-bike-card {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.bike-image {
+    flex: 0 0 40%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bike-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.bike-image:hover img {
+    transform: scale(1.05);
+}
+
+.bike-info {
+    flex: 1;
+}
+
+.bike-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.bike-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.bike-specs .spec {
+    background: var(--secondary-color);
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.bike-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bike-status label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.status-select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    background: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--accent-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.status-select:hover {
+    background: var(--highlight-color);
+}
+
+.more-btn {
+    background: var(--primary-color);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+    border: 1px solid var(--accent-color);
+    text-decoration: none;
+}
+
+.more-btn:hover {
+    background: var(--highlight-color);
 }
 
 /* Events Section */
@@ -531,6 +692,10 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .weather-info {
+        flex-direction: column;
+    }
+
     .burger-menu {
         display: flex;
     }
@@ -556,6 +721,14 @@ body {
     
     .header-nav.active {
         right: 0;
+    }
+
+    .primary-bike-card {
+        flex-direction: column;
+    }
+    
+    .bike-image {
+        width: 100%;
     }
 }
 
