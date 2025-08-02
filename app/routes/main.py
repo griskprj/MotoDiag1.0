@@ -14,4 +14,6 @@ def main():
 @main_bp.route('/index')
 @login_required
 def index():
-    return render_template('dashboard.html')
+    user = current_user
+
+    return render_template('dashboard.html', user=user)
