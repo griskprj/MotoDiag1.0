@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apex Riders - Вход</title>
-    <link rel="stylesheet" href="/app/static/css/login.css">
+    <link rel="stylesheet" href="static/css/login.css">
 </head>
 <body>
     <div class="login-container">
@@ -23,7 +23,7 @@
             {% endif %}
         {% endwith %}
         
-        <form method="POST" action="{{ url_for('auth.login') }}"" id="loginForm">
+        <form method="POST" action="{{ url_for('auth_bp.login') }}" id="loginForm">
             {{ form.hidden_tag() }}
             <div class="input-group">
                 {{ form.username(placeholder="Логин", class="form-control") }}
@@ -53,11 +53,11 @@
             <button type="submit" class="login-btn">Войти</button>
             
             <div class="register-link">
-                <p>Нет аккаунта? <a href="#">Зарегистрироваться</a></p>
+                <p>Нет аккаунта? <a href="{{ url_for('auth_bp.register') }}">Зарегистрироваться</a></p>
             </div>
         </form>
     </div>
 
-    <script src="/app/static/js/login.js"></script>
+    <script src="static/js/login.js"></script>
 </body>
 </html>

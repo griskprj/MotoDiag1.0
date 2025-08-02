@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apex Riders - Регистрация</title>
-    <link rel="stylesheet" href="/app/static/css/register.css">
+    <link rel="stylesheet" href="/static/css/register.css">
 </head>
 <body>
     <div class="register-container">
@@ -13,7 +13,7 @@
             <p>Создайте новый аккаунт</p>
         </div>
         
-        <form id="registerForm">
+        <form method="POST" action="{{ url_for('auth_bp.register') }}" id="registerForm">
             {{ form.hidden_tag() }}
             <div class="input-group">
                 {{ form.username(placeholder="Логин", class="form-control") }}
@@ -30,32 +30,32 @@
             </div>
             
             <div class="input-group">
-                {{ form.password(placeholder="Password", class="form-control") }}
+                {{ form.password(placeholder="Пароль", class="form-control") }}
                 <div class="error-message" id="password-error">
                     {% if form.password.errors %}{{ form.password.errors[0] }}{% endif %}
                 </div>
             </div>
             
             <div class="input-group">
-                {{ form.confirm-password(placeholder="Confirm Password", class="form-control") }}
+                {{ form.confirm_password(placeholder="Подтвердите пароль", class="form-control") }}
                 <div class="error-message" id="confirm-password-error">
-                    {% if form.confirm-password.errors %}{{ form.confirm-password.errors[0] }}{% endif %}
+                    {% if form.confirm_password.errors %}{{ form.confirm_password.errors[0] }}{% endif %}
                 </div>
             </div>
             
             <div class="privacy-policy">
-                <input type="checkbox" id="privacy" required>
+                <input type="checkbox" id="privacy" name="privacy" required>
                 <label for="privacy">Я согласен с <a href="#">политикой конфиденциальности</a> и <a href="#">условиями обработки персональных данных</a></label>
             </div>
             
             <button type="submit" class="register-btn">Зарегистрироваться</button>
             
             <div class="login-link">
-                <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+                <p>Уже есть аккаунт? <a href="login">Войти</a></p>
             </div>
         </form>
     </div>
 
-    <script src="/app/static/js/register.js"></script>
+    <script src="static/js/register.js"></script>
 </body>
 </html>

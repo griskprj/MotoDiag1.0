@@ -1,8 +1,8 @@
-from app import db, login_manager
+from app.__init__ import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy.orm import validates
 from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
+from datetime import datetime
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -10,8 +10,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
-    join_date = db.Column(db.Date, default=datetime.date.today())
+    _password = db.Column(db.String(128), nullable=False)
+    join_date = db.Column(db.Date, default=datetime.utcnow)
     motorcycles = db.relationship('Motorcycle', back_populates='owner', lazy=True)
 
     @property
@@ -28,6 +28,7 @@ class Motorcycle(db.Model):
     __tablename__ = 'motorcycles'
     
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     owner = db.relationship('User', back_populates='motorcycles')
     brand = db.Column(db.String(120), nullable=False)
     model = db.Column(db.String(50), nullable=False)
@@ -40,7 +41,3 @@ class Motorcycle(db.Model):
     def validate_year(self, key, year):
         if not 1900 < year <= datetime.now().year:
             raise ValueError("Invalid year")
-    
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))

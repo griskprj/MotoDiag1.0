@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_user
+from flask import Blueprint, render_template, redirect, url_for, flash, jsonify
+from flask_login import login_user, logout_user, login_required
 from app.forms import RegistrationForm, LoginForm
 from app.models import User
-from app import db
+from app.extensions import db
 
 auth_bp = Blueprint('auth_bp', __name__)
 
@@ -20,10 +20,10 @@ def register():
             db.session.commit()
             
             flash('Регистрация прошла успешно!', 'success')
-            return redirect(url_for('auth_bp.login'))
+            return jsonify({'success': True})
         except Exception as e:
             flash(f'Ошибка при регистрации: {str(e)}', 'danger')
-            return redirect(url_for('auth_bp.register'))
+            return jsonify({'success': False, 'errors': form.errors}), 400
 
     return render_template('register.html', form=form)
 
@@ -31,15 +31,25 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        try:
-            user = User.query.filter_by(email=form.email.data).first()
-            if user and user.verify_password(form.password.data):
-                login_user(user)
-                flash('Вы успешно вошли!', 'success')
-                return redirect(url_for('main_bp.dashboard'))
-            flash('Неверный email или пароль', 'danger')
-        except Exception as e:
-            flash (f'Ошибка при входе: {str(e)}', 'danger')
-            return redirect(url_for('auth_bp.login'))
-        
-        return render_template('login.html', form=form)
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.verify_password(form.password.data):
+            login_user(user)
+            flash('Вы успешно вошли!', 'success')
+            return jsonify({
+                'success': True,
+                'redirect': url_for('main_bp.main')
+            })
+        return jsonify({
+            'success': False,
+            'errors': {field.name: field.errors[0] for field in form if field.errors},
+            'message': 'Неверные учетные данные'
+        }), 400
+
+    return render_template('login.html', form=form)
+
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Вы вышли из системы', 'success')
+    return redirect(url_for('auth_bp.login'))
