@@ -71,7 +71,7 @@ def register():
         
         except Exception as e:
             db.session.rollback()
-            flash(f'Ошибка регистрации: {str(e)}', 'danger')
+            flash(f'Ошибка при регистрации. Повторите попытку позднее', 'danger')
     
     return render_template('auth/register.html')
 
