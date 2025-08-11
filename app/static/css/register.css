@@ -117,6 +117,23 @@ body::before {
     background: rgba(0, 0, 0, 0.2);
 }
 
+.form-danger {
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    color: var(--error-message);
+    margin-bottom: 16px;
+    text-decoration: underline;
+}
+.form-success {
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    color: var(--success-message);
+    margin-bottom: 16px;
+    text-decoration: underline;
+}
+
 .btn-register {
     width: 100%;
     padding: 16px;
