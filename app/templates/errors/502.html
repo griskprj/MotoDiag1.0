@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlaskApp">
+    <link rel="apple-touch-icon" href="/static/ico_192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+    
+    <title>MotoDiag - Ошибка сервера</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/502.css">
+</head>
+<body>
+    <div class="error-container">
+        
+        <div class="error-content">
+            <div class="error-number">502</div>
+            <h1 class="error-title">Сервер заглох на полпути!</h1>
+            <p class="error-text">
+                Похоже, наш сервер перегрелся, как двигатель в пробке. 
+                Мы уже отправили механиков разобраться с проблемой. 
+                Пока можете проверить соединение или заглянуть к нам позже.
+            </p>
+            <a href="/" class="btn-home">Попробовать снова</a>
+        </div>
+
+        <!-- Индикатор ошибки двигателя -->
+        <div class="engine-warning">
+            <div class="pulsing-dot"></div>
+            <span>ОШИБКА СЕРВЕРА: Плохое соединение между узлами</span>
+        </div>
+    </div>
+</body>
+</html>

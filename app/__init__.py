@@ -1,7 +1,7 @@
 from flask import Flask
 from app.extension import db, login_manager, mail, csrf, limiter
 from app.models import User
-from app.routes import main, auth, moto, maintenance, profile
+from app.routes import main, auth, moto, maintenance, profile, errors
 from app.config import config as cfg
 
 def create_app(config_name='production'):
@@ -26,6 +26,7 @@ def create_app(config_name='production'):
     app.register_blueprint(moto.moto_bp)
     app.register_blueprint(maintenance.maintenance_bp)
     app.register_blueprint(profile.profile_bp)
+    app.register_blueprint(errors.errors_bp)
 
     with app.app_context():
         db.create_all()

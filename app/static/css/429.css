@@ -1,0 +1,149 @@
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+    background: var(--bg-primary);
+}
+
+.error-content {
+    background: linear-gradient(145deg, rgba(26, 15, 47, 0.7), rgba(58, 43, 86, 0.4));
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 60px 40px;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid rgba(255, 165, 0, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.error-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    line-height: 1;
+    position: relative;
+}
+
+.error-number::after {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: linear-gradient(45deg, #7D3CFF, #00F0FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: -1;
+}
+
+.error-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--text-main);
+}
+
+.error-text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.traffic-light {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #333;
+    position: relative;
+}
+
+.light::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.light.red {
+    background: #FF3C3C;
+    box-shadow: 0 0 15px #FF3C3C;
+}
+
+.light.yellow {
+    background: #FFA500;
+    box-shadow: 0 0 15px #FFA500;
+}
+
+.light.green {
+    background: #333;
+}
+
+.btn-home {
+    margin-top: 15px;
+    padding: 16px 32px;
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+    color: #0A041A;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(255, 165, 0, 0.3);
+}
+
+.rate-limit-info {
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(255, 165, 0, 0.1);
+    border-radius: 10px;
+    border-left: 3px solid #FFA500;
+    font-size: 0.9rem;
+    color: #FFD700;
+}
+
+@media (max-width: 768px) {
+    .error-number {
+        font-size: 6rem;
+    }
+    
+    .error-title {
+        font-size: 1.5rem;
+    }
+    
+    .error-text {
+        font-size: 1rem;
+    }
+    
+    .error-content {
+        padding: 40px 20px;
+    }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlaskApp">
+    <link rel="apple-touch-icon" href="/static/ico_192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+    
+    <title>MotoDiag - Слишком много запросов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/429.css">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <div class="traffic-light">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </div>
+            
+            <div class="error-number">429</div>
+            <h1 class="error-title">Превышена скорость!</h1>
+            <p class="error-text">
+                Вы отправили слишком много запросов за короткое время, 
+                как мотоциклист на ограниченном участке дороги. 
+                Пожалуйста, сбавьте обороты и попробуйте снова через некоторое время.
+            </p>
+            
+            <div class="rate-limit-info">
+                Лимит запросов: 50 в минуту<br>
+                Попробуйте снова через: <span id="safeTimerDisplay">50</span> секунд
+            </div>
+            
+            <a href="/" class="btn-home">Вернуться на главную</a>
+        </div>
+    </div>
+    
+    <script>
+        function timer(){
+            var sec = 50;
+            var timer = setInterval(function(){
+                document.getElementById('safeTimerDisplay').innerHTML=sec;
+                sec--;
+                if (sec < 0) {
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+
+        window.onload = timer()
+    </script>
+</body>
+</html>
