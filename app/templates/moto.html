@@ -313,7 +313,7 @@
                                 <span class="cost">{{ record.cost }} ₽</span>
                             </div>
                             {% if record.image %}
-                            <img src="{{ url_for('maintenance_image', maintenance_id=record.id ) }}" class="bike-list-image">
+                            <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id ) }}" class="bike-list-image">
                             {% else %}
                             <img src="/static/image/tools.png" class="bike-list-image">
                             {% endif %}
