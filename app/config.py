@@ -20,6 +20,9 @@ class Config:
 
     serializer = URLSafeTimedSerializer(SECRET_KEY)
 
+    SESSION_COOKIE_SECURE = True
+    REMEMBER_COOKIE_DOMAIN = "yourmot.ru"
+
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
