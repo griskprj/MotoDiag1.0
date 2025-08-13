@@ -75,8 +75,7 @@
                         <li><a href="/index">Главная</a></li>
                         <li><a href="/moto/my_moto">Мои мотоциклы</a></li>
                         <li><a href="/maintenance/maintenance" class="active">Обслуживание</a></li>
-                        <li><a href="#">Статистика</a></li>
-                        <li><a href="#">База знаний</a></li>
+                        <li><a href="/community/riders">Riders</a></li>
                     </ul>
                 </nav>
                 
@@ -98,8 +97,7 @@
                 <li><a href="/index">Главная</a></li>
                 <li><a href="/moto/my_moto">Мои мотоциклы</a></li>
                 <li><a href="/maintenance/maintenance" class="active">Обслуживание</a></li>
-                <li><a href="#">Статистика</a></li>
-                <li><a href="#">База знаний</a></li>
+                <li><a href="/community/riders">Riders</a></li>
             </ul>
         </div>
         
@@ -433,7 +431,7 @@
                 </div>
 
                 <!-- Тип привода -->
-                 <div class="form-group">
+                <div class="form-group">
                     <label class="form-label" for="edit-drive-type">Тип привода</label>
                     <select id="edit-drive-type" name="drive_type" class="form-input" required>
                         <option value="chain" {% if moto.drive_type == "chain" %}selected{% endif %}>Цепь</option>
