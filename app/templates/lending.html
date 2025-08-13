@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoDiag - Умный помощник для мотоциклистов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/app/static/css/index.css">
+    <link rel="stylesheet" href="/app/static/css/lending.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">MotoDiag</div>
+
+                <div class="burger-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav>
+                    <ul>
+                        <li><a href="#features">Возможности</a></li>
+                        <li><a href="#how-it-works">Как это работает</a></li>
+                        <li><a href="#screenshots">Скриншоты</a></li>
+                        <li><a href="{{ url_for('auth_bp.register') }}" class="btn btn-secondary">Начать использовать</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="mobile-menu">
+            <ul>
+                <li><a href="#features">Возможности</a></li>
+                <li><a href="#how-it-works">Как это работает</a></li>
+                <li><a href="#screenshots">Скриншоты</a></li>
+                <li><a href="{{ url_for('auth_bp.register') }}" class="btn btn-secondary">Начать использовать</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Умный помощник для вашего мотоцикла</h1>
+                <p class="hero-subtitle">MotoDiag помогает следить за состоянием ваших мотоциклов, напоминает о техническом обслуживании и сохраняет всю историю ремонтов в одном месте.</p>
+                <a href="{{ url_for('auth_bp.register') }}" class="btn">Зарегистрироваться</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <h2 class="section-title">Возможности MotoDiag</h2>
+                <p class="welcome-text" style="text-align: center; max-width: 800px; margin: 0 auto 40px;">MotoDiag предлагает комплексное решение для учета и обслуживания ваших мотоциклов</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Учет мотоциклов</h3>
+                        <p class="feature-text">Добавляйте все свои мотоциклы в цифровой гараж. Храните полную информацию о каждом: модель, год выпуска, пробег, тип привода и другие характеристики.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12H2M5 12L5 19M19 12V19M12 12V19" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Контроль ТО</h3>
+                        <p class="feature-text">Автоматические напоминания о необходимости замены масла, фильтров, тормозной жидкости и других расходников на основе пробега и времени.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 20V10M18 20V4M6 20V16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">История обслуживания</h3>
+                        <p class="feature-text">Ведите полную историю всех проведенных работ с прикреплением чеков и фотографий. Анализируйте расходы на содержание мотоцикла.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Оценка состояния</h3>
+                        <p class="feature-text">Автоматическая оценка технического состояния мотоцикла на основе пробега и сроков последнего обслуживания.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 6V12L16 14" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Напоминания</h3>
+                        <p class="feature-text">Умная система напоминаний о предстоящем обслуживании с расчетом оставшегося ресурса деталей и жидкостей.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12H16L14 15H10L8 12H2" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5.45 5.11L2 12V18C2 18.5304 2.21071 19.0391 2.58579 19.4142C2.96086 19.7893 3.46957 20 4 20H20C20.5304 20 21.0391 19.7893 21.4142 19.4142C21.7893 19.0391 22 18.5304 22 18V12L18.55 5.11C18.3844 4.77679 18.1292 4.49637 17.813 4.30028C17.4967 4.10419 17.1321 4.0002 16.76 4H7.24C6.86792 4.0002 6.50326 4.10419 6.18704 4.30028C5.87083 4.49637 5.61558 4.77679 5.45 5.11Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Для всех типов мотоциклов</h3>
+                        <p class="feature-text">Поддержка всех типов мотоциклов: спортивные, круизеры, эндуро, туристические и другие. Учет особенностей разных типов приводов.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Как работает MotoDiag</h2>
+                <p class="welcome-text" style="text-align: center; max-width: 800px; margin: 0 auto 40px;">Всего несколько простых шагов для полного контроля за вашим мотоциклом</p>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Добавьте мотоцикл</h3>
+                            <p class="step-text">Заполните основные данные о вашем мотоцикле: модель, год выпуска, пробег, тип привода и объем двигателя. Добавьте фото для удобства идентификации.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Укажите последнее ТО</h3>
+                            <p class="step-text">Введите информацию о последнем проведенном техническом обслуживании: когда менялись масло, фильтры, тормозная жидкость и другие расходники.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Обновляйте пробег</h3>
+                            <p class="step-text">Регулярно вносите текущий пробег мотоцикла. Приложение автоматически рассчитает, когда нужно следующее обслуживание.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Получайте напоминания</h3>
+                            <p class="step-text">Система уведомит вас о приближающемся ТО, покажет какие работы нужно выполнить и через сколько километров или дней.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Ведите историю</h3>
+                            <p class="step-text">Фиксируйте все проведенные работы с указанием стоимости, пробега и примечаний. Храните фотографии и документы.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="features-section" id="screenshots">
+            <div class="container">
+                <h2 class="section-title">Интерфейс приложения</h2>
+                <p class="welcome-text" style="text-align: center; max-width: 800px; margin: 0 auto 40px;">Удобный и интуитивно понятный интерфейс для управления вашими мотоциклами</p>
+                
+                <div class="screenshots">
+                    <div class="screenshot">
+                        <img src="/app/static/image/index.png" alt="Главный экран">
+                    </div>
+                    <div class="screenshot">
+                        <img src="/app/static/image/mymoto.png" alt="Мои мотоциклы">
+                    </div>
+                    <div class="screenshot">
+                        <img src="/app/static/image/motodetails.png" alt="Детали мотоцикла">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-card">
+                    <h2 class="cta-title">Начните использовать MotoDiag уже сегодня</h2>
+                    <p class="cta-text">Присоединяйтесь к сообществу ответственных мотоциклистов, которые следят за состоянием своих байков и вовремя проходят ТО.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <a href="{{ url_for('auth_bp.register') }}" class="btn">Зарегистрироваться</a>
+                        <a href="{{ url_for('auth_bp.login') }}" class="btn btn-secondary">Войти</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">© 2025 MotoDiag. Все права защищены.</div>
+                <div class="footer-links">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                    <a href="#">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/app/static/js/burger-menu.js"></script>
+</body>
+</html>
