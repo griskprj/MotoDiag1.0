@@ -20,12 +20,11 @@ class Config:
 
     serializer = URLSafeTimedSerializer(SECRET_KEY)
 
-    SESSION_COOKIE_SECURE = True
-    REMEMBER_COOKIE_DOMAIN = "yourmot.ru"
-
 class DevelopmentConfig(Config):
-    DEBUG = True
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+
+    
 
 class TestingConfig(Config):
     TESTING = True
@@ -33,6 +32,10 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('PROD_DATABASE_URI')
+
+    SESSION_COOKIE_DOMAIN = "yourmot.ru"
+    SESSION_COOKIE_SECURE = True
+    REMEMBER_COOKIE_DOMAIN = "yourmot.ru"
 
     DEBUG = False
     TESTING = False

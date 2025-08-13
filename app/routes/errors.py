@@ -38,3 +38,9 @@ def handle_401(e):
         }), 401
         
     return render_template("errors/401.html"), 401
+
+@errors_bp.app_errorhandler(500)
+def error_500(e):
+    if request.headers.get('X-Request-With') == 'XMLHttpRequest':
+        return jsonify({'error': 'Server error'}), 500
+    return redirect(url_for("/errors/500.html")), 500
