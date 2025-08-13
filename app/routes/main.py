@@ -11,7 +11,11 @@ def main():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     else:
-        return redirect(url_for('auth_bp.login'))  # Перенаправляем на страницу входа
+        return redirect(url_for('main.lending'))  # Перенаправляем на страницу входа
+    
+@main_bp.route("/lending")
+def lending():
+    return render_template("lending.html")
 
 @main_bp.route("/index")
 @login_required
