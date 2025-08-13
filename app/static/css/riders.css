@@ -1,0 +1,138 @@
+/* ========== RIDERS PAGE STYLES ========== */
+.section-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.search-container {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+}
+
+.search-input {
+    display: flex;
+    align-items: center;
+    background: rgba(26, 15, 47, 0.6);
+    border: 1px solid rgba(125, 60, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+}
+
+.search-input:hover, .search-input:focus-within {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 3px rgba(125, 60, 255, 0.1);
+}
+
+.search-input input {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    padding-left: 15px;
+    width: 100%;
+    outline: none;
+}
+
+.search-input svg {
+    flex-shrink: 0;
+}
+
+.riders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.rider-card {
+    background: linear-gradient(145deg, rgba(26,15,47,0.6), rgba(58,43,86,0.3));
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid rgba(125, 60, 255, 0.15);
+    transition: all 0.3s ease;
+}
+
+.rider-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    border-color: rgba(125, 60, 255, 0.3);
+}
+
+.rider-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.rider-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(125, 60, 255, 0.3);
+}
+
+.rider-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.rider-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.rider-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(125, 60, 255, 0.1);
+}
+
+.rider-stats .stat {
+    background: rgba(10, 4, 26, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.rider-stats .stat span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.rider-stats .stat strong {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+}
+
+.rider-actions .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-container {
+        max-width: 100%;
+    }
+    
+    .riders-grid {
+        grid-template-columns: 1fr;
+    }
+}

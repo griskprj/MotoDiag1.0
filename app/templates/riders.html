@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlaskApp">
+    <link rel="apple-touch-icon" href="/static/ico_192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+
+    <title>MotoDiag - Riders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/riders.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">MotoDiag</div>
+                
+                <!-- Burger Menu Button (Mobile) -->
+                <div class="burger-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav>
+                    <ul>
+                        <li><a href="/index">Главная</a></li>
+                        <li><a href="/moto/my_moto">Мои мотоциклы</a></li>
+                        <li><a href="/maintenance/maintenance">Обслуживание</a></li>
+                        <li><a href="/community/riders" class="active">Riders</a></li>
+                    </ul>
+                </nav>
+                
+                <div>
+                    <a href="/profile/profile" style="text-decoration: none;">
+                        {% if user.image %}
+                        <img src="{{ url_for('auth_bp.user_image', user_id=user.id )}}" class="user-avatar">
+                        {% else %}
+                        <img src="/static/image/profile_default.jpg" alt="" class="user-avatar">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div class="mobile-menu">
+            <ul>
+                <li><a href="/index" class="active">Главная</a></li>
+                <li><a href="/my_moto">Мои мотоциклы</a></li>
+                <li><a href="/maintenance">Обслуживание</a></li>
+                <li><a href="/community/riders">Riders</a></li>
+            </ul>
+        </div>
+        
+        <!-- Overlay (Hidden by default) -->
+        <div class="overlay"></div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Заголовок страницы -->
+            <section class="section-header">
+                <h1 class="section-title">Riders</h1>
+                
+                <!-- Поисковая строка -->
+                <div class="search-container">
+                    <div class="search-input">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 21L16.65 16.65" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input type="text" id="rider-search" placeholder="Найти райдера...">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Список райдеров -->
+            <section class="riders-section">
+                <div class="riders-grid">
+                    {% for user in users_data %}
+                        <div class="rider-card">
+                            <div class="rider-header">
+                                {% if user.image %}
+                                <img src="{{ url_for('auth_bp.user_image', user_id=user.id )}}" class="rider-avatar">
+                                {% else %}
+                                <img src="/static/image/profile_default.jpg" alt="" class="rider-avatar">
+                                {% endif %}
+                                <div class="rider-info">
+                                    <h3>{{ user.username }}</h3>
+                                    <p>{{ user.moto_count }} мотоциклов</p>
+                                </div>
+                            </div>
+                            
+                            <div class="rider-stats">
+                                <div class="stat">
+                                    <span>Общий пробег</span>
+                                    <strong>{{ user.total_mileage }} км</strong>
+                                </div>
+                                <div class="stat">
+                                    <span>В сообществе</span>
+                                    <strong>{{ user.join_date|time_ago }}</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="rider-actions">
+                                <button class="btn btn-secondary" onclick="alert('Функция в разработке')">Подписаться</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">© 2025 MotoDiag. Все права защищены.</div>
+                <div class="footer-links">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                    <a href="#">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Поиск райдеров
+        document.getElementById('rider-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const riderCards = document.querySelectorAll('.rider-card');
+            
+            riderCards.forEach(card => {
+                const username = card.querySelector('h3').textContent.toLowerCase();
+                if (username.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

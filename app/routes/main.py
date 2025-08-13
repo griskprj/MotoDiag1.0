@@ -85,8 +85,8 @@ def index():
     upcoming_maintenance.sort(key=lambda x: x['remaining_km'])
 
     return render_template('index.html',
-                         user=user,
-                         moto_data=moto_data,
-                         total_mileage=total_mileage,
-                         avg_condition=avg_condition,
-                         upcoming_maintenance=upcoming_maintenance[:3])
+        user=user,
+        moto_data=moto_data,
+        total_mileage=total_mileage,
+        avg_condition=avg_condition,
+        upcoming_maintenance=upcoming_maintenance[:3])
