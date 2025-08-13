@@ -13,6 +13,7 @@ def create_app(config_name='production'):
 
     db.init_app(app)
     login_manager.init_app(app)
+    login_manager.login_view = "login"
     mail.init_app(app)
     csrf.init_app(app)
     limiter.init_app(app)
