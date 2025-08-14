@@ -5,7 +5,7 @@ from app.models import User, Motorcycle, MaintenanceHistory
 
 community_bp = Blueprint("community_bp", __name__, url_prefix="/community")
 
-@community_bp.route("/allriders")
+@community_bp.route("/riders")
 def riders():
     current_user_data = current_user if current_user.is_authenticated  else None
 
