@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoDiag - {{ user.username }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">MotoDiag</div>
+                
+                <!-- Burger Menu Button (Mobile) -->
+                <div class="burger-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav>
+                    <ul>
+                        <li><a href="/index">Главная</a></li>
+                        <li><a href="/moto/my_moto">Мои мотоциклы</a></li>
+                        <li><a href="/maintenance/maintenance">Обслуживание</a></li>
+                        <li><a href="/community/riders">Riders</a></li>
+                    </ul>
+                </nav>
+                
+                <div>
+                    <a href="/profile/profile" style="text-decoration: none;">
+                        {% if current_user.image %}
+                        <img src="{{ url_for('auth_bp.user_image', user_id=current_user.id )}}" class="user-avatar">
+                        {% else %}
+                        <img src="/static/image/profile_default.jpg" alt="" class="user-avatar">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div class="mobile-menu">
+            <ul>
+                <li><a href="/index">Главная</a></li>
+                <li><a href="/moto/my_moto">Мои мотоциклы</a></li>
+                <li><a href="/maintenance/maintenance">Обслуживание</a></li>
+                <li><a href="/community/riders">Riders</a></li>
+            </ul>
+        </div>
+        
+        <!-- Overlay (Hidden by default) -->
+        <div class="overlay"></div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Заголовок страницы -->
+            <h1 class="page-title">Профиль пользователя</h1>
+            
+            <!-- Основная информация -->
+            <section class="welcome-section">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <div>
+                            {% if user.image %}
+                            <img src="{{ url_for('auth_bp.user_image', user_id=user.id )}}" class="user-avatar-large">
+                            {% else %}
+                            <img src="/static/image/profile_default.jpg" alt="" class="user-avatar-large">
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h2 class="welcome-title">{{ user.username }}</h2>
+                        <p class="welcome-text">Участник с {{ user.join_date.strftime('%d.%m.%Y') }}</p>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">{{ user.moto_count }}</div>
+                                <div class="stat-title">Мотоциклов</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ user.maintenance_count }}</div>
+                                <div class="stat-title">Записей ТО</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ user.total_mileage }} км</div>
+                                <div class="stat-title">Общий пробег</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Мотоциклы пользователя -->
+            <section class="bikes-section">
+                <h2 class="section-title">Мотоциклы пользователя</h2>
+                
+                {% if moto_data %}
+                <div class="bikes-grid">
+                    {% for moto in moto_data %}
+                    <a href="#">
+                        <div class="bike-card">
+                            <img src="{{ url_for('moto.moto_image', moto_id=moto.id) }}" 
+                                alt="{{ moto.model }}"
+                                class="moto-image">
+                            <h3>{{ moto.model }}</h3>
+                            <div class="bike-info">
+                                <span>{{ moto.year }} год</span>
+                                <span>{{ moto.mileage}} км</span>
+                                <span>{{ moto.engine}} см³</span>
+                                <span>
+                                    {% if moto.drive_type == "chain" %}Цепь
+                                    {% elif moto.drive_type == "belt" %}Ремень
+                                    {% elif moto.drive_type == "shaft" %}Кардан
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="bike-status">
+                                <div class="status-indicator status-{{ moto.condition }}">
+                                    <div class="status-dot"></div>
+                                    {{ moto.condition }}
+                                </div>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 18L15 12L9 6" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-bikes">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 20H15M9 4V20V4ZM15 4V20V4ZM3 8H5V20H3V8ZM19 8H21V20H19V8ZM7 8H9V20H7V8ZM11 8H13V20H11V8ZM15 8H17V20H15V8Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p>У пользователя пока нет мотоциклов</p>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">© 2025 MotoDiag. Все права защищены.</div>
+                <div class="footer-links">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                    <a href="#">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/burger-menu.js"></script>
+</body>
+</html>
