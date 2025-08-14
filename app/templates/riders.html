@@ -112,7 +112,7 @@
                             </div>
                             
                             <div class="rider-actions">
-                                <button class="btn btn-secondary" onclick="alert('Функция в разработке')">Подписаться</button>
+                                <a class="btn btn-secondary" href="{{ url_for('community_bp.rider', user_id=user.id)}}"">Подробнее</a>
                             </div>
                         </div>
                     {% endfor %}
@@ -134,6 +134,7 @@
         </div>
     </footer>
 
+    <script src="/static/js/burger-menu.js"></script>
     <script>
         // Поиск райдеров
         document.getElementById('rider-search').addEventListener('input', function() {
