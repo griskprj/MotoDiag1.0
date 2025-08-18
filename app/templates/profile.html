@@ -214,21 +214,26 @@
         const deleteBtn = document.getElementById('delete-account-btn');
         if (deleteBtn) {
             deleteBtn.addEventListener('click', async function() {
-                if (confirm('Вы уверены, что хотите удалить аккаунт? Все данные будут удалены')) {
+                if (confirm('Вы уверены, что хотите удалить аккаунт? Все данные будут удалены без возможности восстановления')) {
                     try {
+                        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+                        
                         const response = await fetch('/profile/profile', {
                             method: 'DELETE',
                             headers: {
-                                'X-CSRFToken': '{{ csrf_token() }}',
+                                'X-CSRFToken': csrfToken,
                                 'Content-Type': 'application/json',
                             },
+                            body: JSON.stringify({
+                                csrf_token: csrfToken  // Добавляем токен и в тело запроса
+                            })
                         });
                         
                         const result = await response.json();
 
                         if (result.success) {
                             alert('Ваш аккаунт был успешно удален');
-                            window.location.href = '/register';
+                            window.location.href = '/auth/register';
                         } else {
                             alert('Ошибка: ' + (result.message || 'Не удалось удалить аккаунт'));
                         }

@@ -19,7 +19,31 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     first_reg = db.Column(db.Integer, default=1)
     join_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    subscriptions = db.relationship(
+        'Subscription',
+        foreign_keys='Subscription.subscriber_id',
+        backref='subscriber',
+        lazy='dynamic'
+    )
+    subscribers = db.relationship(
+        'Subscription',
+        foreign_keys='Subscription.subscribed_to_id',
+        backref='subscribed_to',
+        lazy='dynamic'
+    )
     image = db.Column(db.LargeBinary)
+
+''' SUBSCRIPTIONS '''
+class Subscription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    subscriber_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    subscribed_to_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_subscribed = db.Column(db.DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        db.UniqueConstraint('subscriber_id', 'subscribed_to_id', name='unique_subscription'),
+    )
 
 
 ''' MOTORCYCLE '''

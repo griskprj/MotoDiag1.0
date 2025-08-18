@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for
 from flask_babel import Babel
-from app.extension import db, login_manager, mail, csrf, limiter
+from app.extension import db, login_manager, mail, csrf, limiter, migrate
 from app.models import User
 from app.routes import main, auth, moto, maintenance, profile, commuinty, errors
 from app.config import config as cfg
@@ -19,12 +19,16 @@ def create_app(config_name='production'):
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
     babel = Babel(app)
 
+    # Инициализация расширений
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "login"
     mail.init_app(app)
     csrf.init_app(app)
     limiter.init_app(app)
+    
+    # Инициализация Flask-Migrate с app и db
+    migrate.init_app(app, db)  # Исправлено: добавлены оба параметра
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -41,8 +45,5 @@ def create_app(config_name='production'):
     @login_manager.unauthorized_handler
     def handle_needs_login():
         return redirect(url_for('auth_bp.login'))
-
-    with app.app_context():
-        db.create_all()
 
     return app

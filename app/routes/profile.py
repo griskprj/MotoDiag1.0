@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, render_template, request
 from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import MaintenanceHistory, ElementsFluid, Motorcycle, User
+from app.models import MaintenanceHistory, ElementsFluid, Motorcycle, User, Subscription
 from app.extension import db
 from app.utils.files import allowed_file
 
@@ -116,6 +116,12 @@ def change_password():
 def delete_account():
     user = current_user
     motos = Motorcycle.query.filter_by(owner_id=user.id).all()
+    
+    # Delete subscriptions where useer was subscriber
+    Subscription.query.filter_by(subscriber_id=user.id).delete()
+
+    # Delete subscriptions where user subdscribers
+    Subscription.query.filter_by(subscribed_to_id=user.id).delete
 
     for moto in motos:
         el_fluid = ElementsFluid.query.filter_by(moto_id=moto.id).first()
