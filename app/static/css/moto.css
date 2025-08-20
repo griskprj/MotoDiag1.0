@@ -1,0 +1,35 @@
+.replace-photo-container {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#replace-photo-btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+}
+
+.bike-card-one_moto {
+    height: 550px;
+}
+
+.edit_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .bike-card-one_moto {
+        height: 600px;
+        flex-direction: column;
+
+    }
+
+    .edit_buttons {
+        align-content: space-around;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}

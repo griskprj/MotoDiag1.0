@@ -17,34 +17,7 @@
     <title>YourMot - Обслуживание</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/index.css">
-
-    <style>
-        .user-avatar-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .user-avatar-large {
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .user-avatar {
-             width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/service.css">
 </head>
 <body>
     <header>
@@ -361,7 +334,7 @@
     <script src="/static/js/burger-menu.js"></script>
     <script>
         // Получаем данные о мотоциклах и их типах привода
-    const motoData = [
+        const motoData = [
         {% for moto in moto_data %}
         {
             id: "{{ moto.id }}",
@@ -369,19 +342,19 @@
             drive_type: "{{ moto.drive_type }}"
         },
         {% endfor %}
-    ];
+        ];
 
-    // Сопоставление типов обслуживания с типами привода
-    const serviceToDriveType = {
+        // Сопоставление типов обслуживания с типами привода
+        const serviceToDriveType = {
         'Смазка цепи': 'chain',
         'Замена цепи': 'chain',
         'Замена ремня': 'belt',
         'Замена масла в кардане': 'shaft',
         'Обслуживание кардана': 'shaft'
-    };
+        };
 
-    // Открытие модального окна с фильтрацией
-    document.querySelectorAll('.quick-add-btn').forEach(btn => {
+        // Открытие модального окна с фильтрацией
+        document.querySelectorAll('.quick-add-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const serviceType = this.textContent.trim();
             document.getElementById('serviceType').value = serviceType;
@@ -405,20 +378,20 @@
             
             document.getElementById('serviceModal').style.display = 'flex';
         });
-    });
-        
+        });
+
         // Закрытие модального окна
         document.querySelector('.close-modal').addEventListener('click', function() {
             document.getElementById('serviceModal').style.display = 'none';
         });
-        
+
         // Закрытие при клике вне окна
         document.querySelector('.modal-overlay').addEventListener('click', function(e) {
             if (e.target === this) {
                 this.style.display = 'none';
             }
         });
-        
+
         // Отправка формы
         document.getElementById('serviceForm').addEventListener('submit', async function(e) {
             e.preventDefault();

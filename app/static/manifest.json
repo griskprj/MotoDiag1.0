@@ -1,11 +1,11 @@
 {
-    "name": "MotoDiag",
-    "short_name": "MotoDiag",
+    "name": "YourMot",
+    "short_name": "YourMot",
     "description": "Трекер состояния мотоциклов",
     "start_url": "/index",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "background_color": "#0A041A",
+    "theme_color": "#0A041A",
     "icons": [
         {
             "src": "/static/image/ico_192.png",
