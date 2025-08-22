@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <!-- PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -69,7 +71,10 @@
         <div class="container">
             <!-- Заголовок страницы -->
             <section class="section-header">
-                <h1 class="section-title">Riders</h1>
+                <div>
+                    <h1 class="section-title">Riders</h1>
+                    <p class="section-subtitle">Найдите единомышленников и следите за их достижениями</p>
+                </div>
                 
                 <!-- Поисковая строка -->
                 <div class="search-container">
@@ -78,16 +83,29 @@
                             <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M21 21L16.65 16.65" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <input type="text" id="rider-search" placeholder="Найти райдера...">
+                        <input type="text" id="rider-search" placeholder="Найти райдера по имени...">
                     </div>
                 </div>
             </section>
 
             <!-- Список райдеров -->
             <section class="riders-section">
+                <div class="filters">
+                    <select class="filter-select" id="sort-select">
+                        <option value="newest">Сначала новые</option>
+                        <option value="oldest">Сначала старые</option>
+                        <option value="most_motos">Больше мотоциклов</option>
+                        <option value="most_mileage">Больше пробега</option>
+                    </select>
+                    <select class="filter-select" id="filter-select">
+                        <option value="all">Все райдеры</option>
+                        <option value="subscribed">Мои подписки</option>
+                    </select>
+                </div>
+                
                 <div class="riders-grid">
                     {% for user in users_data %}
-                        <div class="rider-card">
+                        <div class="rider-card" data-join-date="{{ user.join_date }}" data-moto-count="{{ user.moto_count }}" data-mileage="{{ user.total_mileage }}">
                             <div class="rider-header">
                                 {% if user.image %}
                                 <img src="{{ url_for('auth_bp.user_image', user_id=user.id )}}" class="rider-avatar">
@@ -96,36 +114,70 @@
                                 {% endif %}
                                 <div class="rider-info">
                                     <h3>{{ user.username }}</h3>
-                                    <p>{{ user.moto_count }} мотоциклов</p>
+                                    <p>мотоциклов</p>
+                                </div>
+                                <div class="rider-badge">
+                                    {% if user.is_online %}
+                                    <span class="online-dot"></span>
+                                    {% endif %}
                                 </div>
                             </div>
                             
                             <div class="rider-stats">
                                 <div class="stat">
-                                    <span>Общий пробег</span>
-                                    <strong>{{ user.total_mileage }} км</strong>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 20V10M18 20V4M6 20V16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <div>
+                                        <span>Общий пробег</span>
+                                        <strong>{{ user.total_mileage }} км</strong>
+                                    </div>
                                 </div>
                                 <div class="stat">
-                                    <span>В сообществе</span>
-                                    <strong>{{ user.join_date|time_ago }}</strong>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <div>
+                                        <span>В сообществе</span>
+                                        <strong>{{ user.join_date|time_ago }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="rider-social">
+                                <div class="social-stat">
+                                    <span class="count subscribers-count">{{ user.subscribers_count }}</span>
+                                    <span class="label">Подписчиков</span>
+                                </div>
+                                <div class="social-stat">
+                                    <span class="count">{{ user.subscriptions_count }}</span>
+                                    <span class="label">Подписок</span>
                                 </div>
                             </div>
                             
                             <div class="rider-actions">
-                                <a class="btn btn-secondary" style="margin-bottom: 12px;" href="{{ url_for('community_bp.rider', user_id=user.id)}}">Подробнее</a>
+                                <a class="btn btn-outline" href="{{ url_for('community_bp.rider', user_id=user.id)}}">Профиль</a>
                                 {% if current_user.is_authenticated and current_user.id != user.id %}
                                     {% if user.is_subscribed %}
-                                        <button class="btn btn-secondary" style="margin-bottom: 12px;" onclick="unsubscribe({{ user.id }})">Отписаться</button>
+                                        <button class="btn btn-secondary" onclick="unsubscribe({{ user.id }})">Отписаться</button>
                                     {% else %}
-                                        <button class="btn btn-secondary" style="margin-bottom: 12px;" onclick="subscribe({{ user.id }})">Подписаться</button>
+                                        <button class="btn btn-primary" onclick="subscribe({{ user.id }})">Подписаться</button>
                                     {% endif %}
                                 {% endif %}
-                                <span>Подписчиков: {{ user.subscribers_count }}</span>
-                                <span>Подписок: {{ user.subscriptions_count }}</span>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
+                
+                {% if users_data|length == 0 %}
+                <div class="no-riders">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 17C17.5 17.5 19 19 19 21H5C5 19 6.5 17.5 7 17M12 15C9.79086 15 8 13.2091 8 11C8 8.79086 9.79086 7 12 7C14.2091 7 16 8.79086 16 11C16 13.2091 14.2091 15 12 15ZM12 15C8.68629 15 6 12.3137 6 9C6 5.68629 8.68629 3 12 3C15.3137 3 18 5.68629 18 9C18 12.3137 15.3137 15 12 15Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3>Райдеры не найдены</h3>
+                    <p>Попробуйте изменить параметры поиска или фильтры</p>
+                </div>
+                {% endif %}
             </section>
         </div>
     </main>
