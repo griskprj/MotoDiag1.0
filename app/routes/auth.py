@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from app.extension import db, limiter
 from app.models import User
-from app.utils.email import send_email_simple
+from app.utils.email import send_email
 from app.utils.tokens import confirm_token, generate_confirmation_token
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
@@ -88,7 +88,7 @@ def register():
                 _external=True
             )
             
-            send_email_simple(
+            send_email(
                 subject='Подтверждение регистрации - YourMot',
                 recipients=[email],
                 template='emails/confirm_email.html',
@@ -148,7 +148,7 @@ def confirm_email(token):
         db.session.commit()
 
         try:
-            send_email_simple(
+            send_email(
                 subject='Добро пожаловат в YourMot!',
                 recipients=[user.email],
                 template='emails/welcome.html',
@@ -180,7 +180,7 @@ def resend_confirmation():
                 _external=True
             )
 
-            send_email_simple(
+            send_email(
                 subject='Подтверждение регистрации - YourMot',
                 recipients=[current_user.email],
                 template='emails/confirm_email.html',
