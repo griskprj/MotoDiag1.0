@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlaskApp">
+    <link rel="apple-touch-icon" href="/static/ico_192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+
     <title>YourMot - Умный помощник для мотоциклистов</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/index.css">
@@ -24,7 +35,6 @@
                 <nav>
                     <ul style="align-items: center;">
                         <li><a href="#features">Возможности</a></li>
-                        <li><a href="#how-it-works">Как это работает</a></li>
                         <li><a href="#screenshots">Скриншоты</a></li>
                         <li><a href="{{ url_for('auth_bp.register') }}" class="btn btn-secondary">Начать использовать</a></li>
                     </ul>
@@ -34,7 +44,6 @@
         <div class="mobile-menu">
             <ul>
                 <li><a href="#features">Возможности</a></li>
-                <li><a href="#how-it-works">Как это работает</a></li>
                 <li><a href="#screenshots">Скриншоты</a></li>
                 <li><a href="{{ url_for('auth_bp.register') }}" class="btn btn-secondary">Начать использовать</a></li>
             </ul>
