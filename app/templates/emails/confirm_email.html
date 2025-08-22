@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Подтверждение регистрации</title>
+</head>
+<body>
+    <h2>Добро пожаловать в YourMot, {{ username }}!</h2>
+    <p>Для завершения регистрации подтвердите ваш email:</p>
+    <a href="{{ confirmation_url }}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+        Подтвердить Email
+    </a>
+    <p>Если вы не регистрировались на нашем сайте, проигнорируйте это письмо.</p>
+    <p>Ссылка действительна в течение 1 часа.</p>
+</body>
+</html>

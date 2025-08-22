@@ -13,6 +13,9 @@ class PendingRegistration(db.Model):
 
 ''' USER '''
 class User(UserMixin, db.Model):
+    is_confirmed = db.Column(db.Boolean, default=False)
+    confirmation_token = db.Column(db.String(100), unique=True)
+    confirmation_sent_at = db.Column(db.DateTime)
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(120), nullable=False)
@@ -33,6 +36,12 @@ class User(UserMixin, db.Model):
         lazy='dynamic'
     )
     image = db.Column(db.LargeBinary)
+
+    __table_args__ = (
+        db.UniqueConstraint('username', name='uq_user_username'),
+        db.UniqueConstraint('email', name='uq_user_email'),
+        db.UniqueConstraint('confirmation_token', name='uq_user_confirmation_token'),
+    )
 
 ''' SUBSCRIPTIONS '''
 class Subscription(db.Model):
