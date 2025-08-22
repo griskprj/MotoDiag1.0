@@ -66,36 +66,42 @@ def register():
                 username=username,
                 email=email,
                 password_hash=generate_password_hash(password),
-                confirmation_token=generate_confirmation_token(email),
-                confirmation_sent_at = datetime.utcnow()
+                is_confirmed=False  # По умолчанию не подтвержден
             )
             
             db.session.add(user)
             db.session.commit()
-
-            try:
-                confirmation_url = url_for(
-                    'auth_bp.confirm_email',
-                    token=user.confirmation_token,
-                    _external=True
-                )
-
-                send_email_simple(
-                    subject='Подтверждение регистрации - YourMot',
-                    recipients=[email],
-                    template='emails/confirm_email.html',
-                    username=username,
-                    confirmation_url=confirmation_url
-                )
-                flash('Письмо с подтверждением отправлено на вашу почту!', 'success')
-                return redirect(url_for('auth_bp.login'))
-            except Exception as e:
-                db.session.rollback()
-                flash('Ошибка при регистрации. Повторите попытку позднее', 'danger')
-
+            
+            # НЕМЕДЛЕННЫЙ ответ пользователю
+            flash('Регистрация успешна! Проверьте email для подтверждения', 'success')
+            
+            # Асинхронная отправка email подтверждения
+            confirmation_token = generate_confirmation_token(email)
+            user.confirmation_token = confirmation_token
+            user.confirmation_sent_at = datetime.utcnow()
+            db.session.commit()
+            
+            # Отправка email в фоне
+            confirmation_url = url_for(
+                'auth_bp.confirm_email',
+                token=confirmation_token,
+                _external=True
+            )
+            
+            send_email_simple(
+                subject='Подтверждение регистрации - YourMot',
+                recipients=[email],
+                template='emails/confirm_email.html',
+                username=username,
+                confirmation_url=confirmation_url
+            )
+            
+            return redirect(url_for('auth_bp.login'))
+        
         except Exception as e:
             db.session.rollback()
-            flash(f'Ошибка при регистрации. Повторите попытку позднее', 'danger')
+            current_app.logger.error(f"Ошибка регистрации: {e}")
+            flash('Ошибка при регистрации. Повторите попытку позднее', 'danger')
     
     return render_template('auth/register.html')
 
