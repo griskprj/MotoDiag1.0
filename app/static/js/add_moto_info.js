@@ -61,8 +61,8 @@ replacePhotoBtn.addEventListener('click', function() {
 
 function handlePhotoSelection(file) {
     if (file) {
-        if (file.size > 2 * 1024 * 1024) {
-            alert('Файл слишком большой (больше 2МБ)');
+        if (file.size > 10 * 1024 * 1024) {
+            alert('Файл слишком большой (больше 10МБ)');
             photoInput.value = '';
             return;
         }

@@ -6,6 +6,10 @@ from app.extension import db
 
 community_bp = Blueprint("community_bp", __name__, url_prefix="/community")
 
+@community_bp.route("/contact")
+def contact():
+    return render_template("contact.html")
+
 @community_bp.route("/riders")
 @login_required
 def riders():
