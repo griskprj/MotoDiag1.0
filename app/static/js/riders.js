@@ -13,7 +13,7 @@ document.getElementById('rider-search').addEventListener('input', function() {
     });
 });
 
-// Функции подписки/отписки с улучшенной обработкой ошибок
+// Функции подписки/отписки
 async function subscribe(userId) {
     try {
         const response = await fetch(`/community/subscribe/${userId}`, {
@@ -23,12 +23,6 @@ async function subscribe(userId) {
                 'Content-Type': 'application/json',
             }
         });
-        
-        // Проверяем тип ответа
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            throw new Error('Сервер вернул не JSON ответ');
-        }
         
         const data = await response.json();
         
@@ -53,12 +47,6 @@ async function unsubscribe(userId) {
             }
         });
         
-        // Проверяем тип ответа
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            throw new Error('Сервер вернул не JSON ответ');
-        }
-        
         const data = await response.json();
         
         if (data.success) {
@@ -74,24 +62,15 @@ async function unsubscribe(userId) {
 
 // Вспомогательные функции
 function getCSRFToken() {
-    // Попробуем найти CSRF токен в мета-тегах
     const metaToken = document.querySelector('meta[name="csrf-token"]');
-    if (metaToken) {
-        return metaToken.getAttribute('content');
-    }
-    
-    // Или в форме
-    const formToken = document.querySelector('input[name="csrf_token"]');
-    if (formToken) {
-        return formToken.value;
-    }
-    
-    console.warn('CSRF token not found');
-    return '';
+    return metaToken ? metaToken.getAttribute('content') : '';
 }
 
 function updateSubscriptionUI(userId, isSubscribed, subscribersCount) {
-    const button = document.querySelector(`button[onclick*="${userId}"]`);
+    const card = document.querySelector(`.rider-card[data-user-id="${userId}"]`);
+    if (!card) return;
+    
+    const button = card.querySelector(`button[onclick*="${userId}"]`);
     if (!button) return;
     
     if (isSubscribed) {
@@ -106,36 +85,26 @@ function updateSubscriptionUI(userId, isSubscribed, subscribersCount) {
         button.classList.add('btn-primary');
     }
     
-    // Обновляем счетчик подписчиков если передан
+    // Обновляем счетчик подписчиков
     if (subscribersCount !== undefined) {
-        const subscriberElement = document.querySelector(`.rider-card[data-user-id="${userId}"] .subscribers-count`);
+        const subscriberElement = card.querySelector('.subscribers-count');
         if (subscriberElement) {
             subscriberElement.textContent = subscribersCount;
         }
     }
-    window.location.reload()
 }
 
 function showError(message) {
-    // Простое уведомление об ошибке
     alert(message);
 }
 
-// Фильтрация и сортировка (клиентская сторона)
+// Фильтрация и сортировка
 document.addEventListener('DOMContentLoaded', function() {
     const filterSelect = document.getElementById('filter-select');
     const sortSelect = document.getElementById('sort-select');
     
-    if (filterSelect) {
-        filterSelect.addEventListener('change', filterRiders);
-    }
-    
-    if (sortSelect) {
-        sortSelect.addEventListener('change', sortRiders);
-    }
-    
-    // Инициализация данных для карточек
-    initRiderCards();
+    if (filterSelect) filterSelect.addEventListener('change', filterRiders);
+    if (sortSelect) sortSelect.addEventListener('change', sortRiders);
 });
 
 function filterRiders() {
@@ -146,9 +115,9 @@ function filterRiders() {
         if (filterValue === 'all') {
             card.style.display = 'block';
         } else if (filterValue === 'subscribed') {
-            // Простая клиентская фильтрация по подпискам
-            const subscribeBtn = card.querySelector('.btn-secondary');
-            card.style.display = subscribeBtn ? 'block' : 'none';
+            // Проверяем, есть ли кнопка отписки (значит пользователь подписан)
+            const unsubscribeBtn = card.querySelector('button.btn-secondary');
+            card.style.display = unsubscribeBtn ? 'block' : 'none';
         }
     });
 }
@@ -159,15 +128,22 @@ function sortRiders() {
     const riderCards = Array.from(ridersContainer.querySelectorAll('.rider-card'));
     
     riderCards.sort((a, b) => {
+        const aDate = new Date(a.dataset.joinDate);
+        const bDate = new Date(b.dataset.joinDate);
+        const aMotos = parseInt(a.dataset.motoCount) || 0;
+        const bMotos = parseInt(b.dataset.motoCount) || 0;
+        const aMileage = parseInt(a.dataset.mileage) || 0;
+        const bMileage = parseInt(b.dataset.mileage) || 0;
+        
         switch(sortValue) {
             case 'newest':
-                return new Date(b.dataset.joinDate) - new Date(a.dataset.joinDate);
+                return bDate - aDate; // Новые сначала
             case 'oldest':
-                return new Date(a.dataset.joinDate) - new Date(b.dataset.joinDate);
+                return aDate - bDate; // Старые сначала
             case 'most_motos':
-                return parseInt(b.dataset.motoCount) - parseInt(a.dataset.motoCount);
+                return bMotos - aMotos; // Больше мотоциклов
             case 'most_mileage':
-                return parseInt(b.dataset.mileage) - parseInt(a.dataset.mileage);
+                return bMileage - aMileage; // Больше пробега
             default:
                 return 0;
         }
@@ -176,40 +152,4 @@ function sortRiders() {
     // Очищаем контейнер и добавляем отсортированные карточки
     ridersContainer.innerHTML = '';
     riderCards.forEach(card => ridersContainer.appendChild(card));
-}
-
-function initRiderCards() {
-    document.querySelectorAll('.rider-card').forEach(card => {
-        // Извлекаем данные из текста для сортировки
-        const joinDateText = card.querySelector('.rider-stats strong:last-child')?.textContent;
-        const motoCountText = card.querySelector('.rider-info p')?.textContent;
-        const mileageText = card.querySelector('.rider-stats strong:first-child')?.textContent;
-        
-        // Преобразуем в значения для сортировки
-        card.dataset.joinDate = parseJoinDate(joinDateText);
-        card.dataset.motoCount = parseMotoCount(motoCountText);
-        card.dataset.mileage = parseMileage(mileageText);
-    });
-}
-
-// Вспомогательные функции для парсинга данных
-function parseJoinDate(text) {
-    if (!text) return new Date();
-    
-    // Простой парсинг относительных дат
-    const now = new Date();
-    if (text.includes('день') || text.includes('дня') || text.includes('дней')) {
-        const days = parseInt(text) || 0;
-        return new Date(now.setDate(now.getDate() - days));
-    }
-    return new Date();
-}
-
-function parseMotoCount(text) {
-    return parseInt(text) || 0;
-}
-
-function parseMileage(text) {
-    if (!text) return 0;
-    return parseInt(text.replace(/\sкм/g, '').replace(/\s/g, '')) || 0;
 }

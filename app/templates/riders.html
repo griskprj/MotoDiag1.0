@@ -106,7 +106,7 @@
                 
                 <div class="riders-grid">
                     {% for user in users_data %}
-                        <div class="rider-card" data-join-date="{{ user.join_date }}" data-moto-count="{{ user.moto_count }}" data-mileage="{{ user.total_mileage }}">
+                        <div class="rider-card" data-user-id="{{ user.id }}" data-join-date="{{ user.join_date }}" data-moto-count="{{ user.moto_count }}" data-mileage="{{ user.total_mileage }}">
                             <div class="rider-header">
                                 {% if user.image %}
                                 <img src="{{ url_for('auth_bp.user_image', user_id=user.id )}}" class="rider-avatar">
