@@ -269,30 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSearch();
     initFilters();
     initRiderCardsData();
-    
-    // Добавляем кнопку для тестирования
-    addTestButton();
 });
-
-function addTestButton() {
-    const filtersSection = document.querySelector('.filters');
-    if (filtersSection && !document.getElementById('test-sort-btn')) {
-        const testBtn = document.createElement('button');
-        testBtn.id = 'test-sort-btn';
-        testBtn.textContent = 'Тест сортировки';
-        testBtn.style.marginLeft = '10px';
-        testBtn.style.padding = '8px 12px';
-        testBtn.style.background = '#7D3CFF';
-        testBtn.style.color = 'white';
-        testBtn.style.border = 'none';
-        testBtn.style.borderRadius = '4px';
-        testBtn.style.cursor = 'pointer';
-        testBtn.onclick = testSorting;
-        
-        filtersSection.appendChild(testBtn);
-        console.log('✓ Test button added');
-    }
-}
 
 // Fallback для случаев, когда DOM уже загружен
 if (document.readyState === 'loading') {
@@ -306,5 +283,4 @@ function initAll() {
     initSearch();
     initFilters();
     initRiderCardsData();
-    addTestButton();
 }
