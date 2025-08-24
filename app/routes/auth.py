@@ -34,6 +34,7 @@ def login():
 
 '''REGISTER'''
 @auth_bp.route("/register", methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -60,18 +61,20 @@ def register():
             user = User(
                 username=username,
                 email=email,
-                password_hash=generate_password_hash(password)
+                password_hash=generate_password_hash(password),
             )
             
             db.session.add(user)
             db.session.commit()
             
-            flash('Регистрация успешна! Теперь вы можете войти', 'success')
+            flash('Регистрация успешна. Теперь вы можете войти', 'success')
+            
             return redirect(url_for('auth_bp.login'))
         
         except Exception as e:
             db.session.rollback()
-            flash(f'Ошибка при регистрации. Повторите попытку позднее', 'danger')
+            current_app.logger.error(f"Ошибка регистрации: {e}")
+            flash('Ошибка при регистрации. Повторите попытку позднее', 'danger')
     
     return render_template('auth/register.html')
 
