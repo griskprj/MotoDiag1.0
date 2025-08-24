@@ -1,25 +1,121 @@
-.user-avatar-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+/* История обслуживания */
+.history-list {
+    display: grid;
+    gap: 15px;
 }
 
-.user-avatar-large {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    overflow: hidden;
+.history-item {
+    background: linear-gradient(145deg, rgba(26,15,47,0.6), rgba(58,43,86,0.4));
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(125, 60, 255, 0.1);
+    transition: all 0.3s ease;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.user-avatar {
-        width: 36px;
-    height: 36px;
+.history-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(125, 60, 255, 0.15);
+    border-color: rgba(125, 60, 255, 0.3);
+}
+
+.history-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.history-icon {
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
-    overflow: hidden;
-    background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
+    background: rgba(125, 60, 255, 0.1);
+    display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+    border: 1px solid rgba(125, 60, 255, 0.2);
+}
+
+.history-details h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: var(--text-main);
+}
+
+.history-details p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.history-meta {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.text-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.mileage, .cost {
+    font-size: 0.9rem;
+}
+
+.mileage {
+    color: var(--accent-cyan);
+}
+
+.cost {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.history-image {
+    width: 256px;
+    height: 128px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid rgba(125, 60, 255, 0.2);
+}
+
+.history-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: rgba(125, 60, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: 1px dashed rgba(125, 60, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    .history-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .history-meta {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .text-meta {
+        align-items: center;
+    }
 }

@@ -293,12 +293,17 @@ document.getElementById('maintenanceForm').addEventListener('submit', async func
     const motoId = formData.get('moto_id');
     
     try {
+        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+
         const response = await fetch('/maintenance/update_last_maintenance', {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': '{{ csrf_token() }}'
-            }
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                        csrf_token: csrfToken  // Добавляем токен и в тело запроса
+            })
         });
         
         if (!response.ok) {
