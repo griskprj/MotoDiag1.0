@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for
 from flask_babel import Babel
 from app.extension import db, login_manager, mail, csrf, limiter, migrate
 from app.models import User
-from app.routes import main, auth, moto, maintenance, profile, commuinty, errors
+from app.routes import main, auth, moto, maintenance, profile, commuinty, errors, law
 from app.config import config as cfg
 from app.utils import user_time_ago
 
@@ -39,6 +39,7 @@ def create_app(config_name='production'):
     app.register_blueprint(profile.profile_bp)
     app.register_blueprint(commuinty.community_bp)
     app.register_blueprint(errors.errors_bp)
+    app.register_blueprint(law.law_bp)
 
     @login_manager.unauthorized_handler
     def handle_needs_login():
