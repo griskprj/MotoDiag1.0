@@ -72,6 +72,13 @@
                 >
             </div>
 
+            <div class="additional-actions">
+                <label class="remember-me" style="color: var(--text-main);">
+                    <input type="checkbox" style="min-width: 18px;">
+                    <p>Я согласен с <a href="{{ url_for('law_bp.policy') }}" style="color: var(--accent-cyan);">политикой конфиденциальности</a> и <a href="{{ url_for('law_bp.terms_for_use') }}" style="color: var(--accent-cyan);">условиями использования</a></p>
+                </label>
+            </div>
+
             <button type="submit" class="btn-register">Создать аккаунт</button>
         </form>
 

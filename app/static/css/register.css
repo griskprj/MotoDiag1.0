@@ -134,6 +134,40 @@ body::before {
     text-decoration: underline;
 }
 
+
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.remember-me input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--accent-purple);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.remember-me input:checked {
+    background-color: var(--accent-purple);
+}
+
+.remember-me input:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .btn-register {
     width: 100%;
     padding: 16px;
