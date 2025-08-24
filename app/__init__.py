@@ -19,7 +19,6 @@ def create_app(config_name='production'):
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
     babel = Babel(app)
 
-    # Инициализация расширений
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "login"
@@ -27,8 +26,7 @@ def create_app(config_name='production'):
     csrf.init_app(app)
     limiter.init_app(app)
     
-    # Инициализация Flask-Migrate с app и db
-    migrate.init_app(app, db)  # Исправлено: добавлены оба параметра
+    migrate.init_app(app, db) 
 
     @login_manager.user_loader
     def load_user(user_id):

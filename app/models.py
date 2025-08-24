@@ -13,10 +13,6 @@ class PendingRegistration(db.Model):
     verification_token = db.Column(db.String(32), nullable=False)
     token_expiration = db.Column(db.DateTime, nullable=False)
 
-    __table_args__ = (
-        db.UniqueConstraint('username', name='uq_pending_username'),
-    )
-
 ''' USER '''
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -27,9 +23,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     first_reg = db.Column(db.Integer, default=1)
     join_date = db.Column(db.DateTime, default=datetime.utcnow)
-    is_confirmed = db.Column(db.Boolean, default=False)
-    confirmation_token = db.Column(db.String(100), unique=True)
-    confirmation_sent_at = db.Column(db.DateTime)
     image = db.Column(db.LargeBinary)
 
     subscriptions = db.relationship(
@@ -45,12 +38,6 @@ class User(UserMixin, db.Model):
         lazy='dynamic'
     )
 
-    __table_args__ = (
-        db.UniqueConstraint('username', name='uq_user_username'),
-        db.UniqueConstraint('email', name='uq_user_email'),
-        db.UniqueConstraint('confirmation_token', name='uq_user_confirmation_token'),
-    )
-
 ''' SUBSCRIPTIONS '''
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
@@ -59,10 +46,6 @@ class Subscription(db.Model):
     subscriber_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     subscribed_to_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date_subscribed = db.Column(db.DateTime, default=datetime.utcnow)
-
-    __table_args__ = (
-        db.UniqueConstraint('subscriber_id', 'subscribed_to_id', name='uq_subscription_pair'),
-    )
 
 ''' MOTORCYCLE '''
 class Motorcycle(db.Model):
@@ -129,7 +112,3 @@ class PasswordResetToken(db.Model):
     token = db.Column(db.String(200), nullable=False)
     token_expiration = db.Column(db.DateTime, nullable=False)
     used = db.Column(db.Boolean, default=False)
-
-    __table_args__ = (
-        db.UniqueConstraint('token', name='uq_password_reset_token'),
-    )
