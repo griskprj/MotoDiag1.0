@@ -1,17 +1,28 @@
+console.log('=== RIDERS JS LOADED ===');
+
 // Поиск райдеров
-document.getElementById('rider-search').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const riderCards = document.querySelectorAll('.rider-card');
-    
-    riderCards.forEach(card => {
-        const username = card.querySelector('h3').textContent.toLowerCase();
-        if (username.includes(searchTerm)) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-});
+function initSearch() {
+    const searchInput = document.getElementById('rider-search');
+    if (searchInput) {
+        console.log('Search input found');
+        searchInput.addEventListener('input', function() {
+            console.log('Search input:', this.value);
+            const searchTerm = this.value.toLowerCase();
+            const riderCards = document.querySelectorAll('.rider-card');
+            
+            riderCards.forEach(card => {
+                const username = card.querySelector('h3').textContent.toLowerCase();
+                if (username.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    } else {
+        console.log('Search input NOT found');
+    }
+}
 
 // Функции подписки/отписки
 async function subscribe(userId) {
@@ -85,7 +96,6 @@ function updateSubscriptionUI(userId, isSubscribed, subscribersCount) {
         button.classList.add('btn-primary');
     }
     
-    // Обновляем счетчик подписчиков
     if (subscribersCount !== undefined) {
         const subscriberElement = card.querySelector('.subscribers-count');
         if (subscriberElement) {
@@ -98,24 +108,89 @@ function showError(message) {
     alert(message);
 }
 
-// Фильтрация и сортировка
-document.addEventListener('DOMContentLoaded', function() {
+// ОСНОВНАЯ ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ
+function initFilters() {
+    console.log('Initializing filters...');
+    
     const filterSelect = document.getElementById('filter-select');
     const sortSelect = document.getElementById('sort-select');
     
-    if (filterSelect) filterSelect.addEventListener('change', filterRiders);
-    if (sortSelect) sortSelect.addEventListener('change', sortRiders);
-});
+    if (filterSelect) {
+        console.log('✓ Filter select found');
+        filterSelect.addEventListener('change', function() {
+            console.log('🔹 Filter changed to:', this.value);
+            applyFiltersAndSorting();
+        });
+    } else {
+        console.log('✗ Filter select NOT found');
+    }
+    
+    if (sortSelect) {
+        console.log('✓ Sort select found');
+        sortSelect.addEventListener('change', function() {
+            console.log('🔹 Sort changed to:', this.value);
+            applyFiltersAndSorting();
+        });
+    } else {
+        console.log('✗ Sort select NOT found');
+    }
+}
+
+function initRiderCardsData() {
+    console.log('Initializing rider cards data...');
+    const riderCards = document.querySelectorAll('.rider-card');
+    console.log('Found', riderCards.length, 'rider cards');
+    
+    riderCards.forEach((card, index) => {
+        const joinDate = card.dataset.joinDate;
+        const motoCount = card.dataset.motoCount;
+        const mileage = card.dataset.mileage;
+        
+        // Проверяем и корректируем данные
+        if (!motoCount && motoCount !== '0') {
+            const motoText = card.querySelector('.rider-info p')?.textContent;
+            if (motoText) {
+                const count = parseInt(motoText.replace(/\D/g, '')) || 0;
+                card.dataset.motoCount = count;
+            }
+        }
+        
+        if (!mileage && mileage !== '0') {
+            const mileageText = card.querySelector('.rider-stats strong:first-child')?.textContent;
+            if (mileageText) {
+                const mileageValue = parseInt(mileageText.replace(/\D/g, '')) || 0;
+                card.dataset.mileage = mileageValue;
+            }
+        }
+        
+        console.log(`Card ${index}:`, {
+            motoCount: card.dataset.motoCount,
+            mileage: card.dataset.mileage,
+            joinDate: card.dataset.joinDate
+        });
+    });
+}
+
+function applyFiltersAndSorting() {
+    console.log('=== APPLYING FILTERS AND SORTING ===');
+    filterRiders();
+    sortRiders();
+}
 
 function filterRiders() {
-    const filterValue = document.getElementById('filter-select').value;
+    const filterValue = document.getElementById('filter-select')?.value;
+    if (!filterValue) {
+        console.log('No filter value found');
+        return;
+    }
+    
+    console.log('Filtering with value:', filterValue);
     const riderCards = document.querySelectorAll('.rider-card');
     
     riderCards.forEach(card => {
         if (filterValue === 'all') {
             card.style.display = 'block';
         } else if (filterValue === 'subscribed') {
-            // Проверяем, есть ли кнопка отписки (значит пользователь подписан)
             const unsubscribeBtn = card.querySelector('button.btn-secondary');
             card.style.display = unsubscribeBtn ? 'block' : 'none';
         }
@@ -123,13 +198,30 @@ function filterRiders() {
 }
 
 function sortRiders() {
-    const sortValue = document.getElementById('sort-select').value;
+    const sortValue = document.getElementById('sort-select')?.value;
+    if (!sortValue) {
+        console.log('No sort value found');
+        return;
+    }
+    
+    console.log('Sorting by:', sortValue);
     const ridersContainer = document.querySelector('.riders-grid');
-    const riderCards = Array.from(ridersContainer.querySelectorAll('.rider-card'));
+    if (!ridersContainer) {
+        console.log('Riders container not found');
+        return;
+    }
+    
+    const riderCards = Array.from(ridersContainer.querySelectorAll('.rider-card[style*="display: block"], .rider-card:not([style])'));
+    console.log('Visible cards to sort:', riderCards.length);
+    
+    if (riderCards.length === 0) {
+        console.log('No visible cards to sort');
+        return;
+    }
     
     riderCards.sort((a, b) => {
-        const aDate = new Date(a.dataset.joinDate);
-        const bDate = new Date(b.dataset.joinDate);
+        const aDate = new Date(a.dataset.joinDate || 0);
+        const bDate = new Date(b.dataset.joinDate || 0);
         const aMotos = parseInt(a.dataset.motoCount) || 0;
         const bMotos = parseInt(b.dataset.motoCount) || 0;
         const aMileage = parseInt(a.dataset.mileage) || 0;
@@ -137,19 +229,82 @@ function sortRiders() {
         
         switch(sortValue) {
             case 'newest':
-                return bDate - aDate; // Новые сначала
+                return bDate - aDate;
             case 'oldest':
-                return aDate - bDate; // Старые сначала
+                return aDate - bDate;
             case 'most_motos':
-                return bMotos - aMotos; // Больше мотоциклов
+                return bMotos - aMotos;
             case 'most_mileage':
-                return bMileage - aMileage; // Больше пробега
+                return bMileage - aMileage;
             default:
                 return 0;
         }
     });
     
-    // Очищаем контейнер и добавляем отсортированные карточки
+    // Сохраняем текущий scroll position
+    const scrollTop = ridersContainer.scrollTop;
+    
+    // Переставляем карточки
     ridersContainer.innerHTML = '';
-    riderCards.forEach(card => ridersContainer.appendChild(card));
+    riderCards.forEach(card => {
+        ridersContainer.appendChild(card);
+    });
+    
+    // Восстанавливаем scroll position
+    ridersContainer.scrollTop = scrollTop;
+    
+    console.log('✓ Sorting completed');
+}
+
+// Глобальная функция для ручного вызова
+window.testSorting = function() {
+    console.log('=== MANUAL SORTING TEST ===');
+    applyFiltersAndSorting();
+};
+
+// Основная инициализация
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== DOM CONTENT LOADED ===');
+    
+    initSearch();
+    initFilters();
+    initRiderCardsData();
+    
+    // Добавляем кнопку для тестирования
+    addTestButton();
+});
+
+function addTestButton() {
+    const filtersSection = document.querySelector('.filters');
+    if (filtersSection && !document.getElementById('test-sort-btn')) {
+        const testBtn = document.createElement('button');
+        testBtn.id = 'test-sort-btn';
+        testBtn.textContent = 'Тест сортировки';
+        testBtn.style.marginLeft = '10px';
+        testBtn.style.padding = '8px 12px';
+        testBtn.style.background = '#7D3CFF';
+        testBtn.style.color = 'white';
+        testBtn.style.border = 'none';
+        testBtn.style.borderRadius = '4px';
+        testBtn.style.cursor = 'pointer';
+        testBtn.onclick = testSorting;
+        
+        filtersSection.appendChild(testBtn);
+        console.log('✓ Test button added');
+    }
+}
+
+// Fallback для случаев, когда DOM уже загружен
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+} else {
+    setTimeout(initAll, 100);
+}
+
+function initAll() {
+    console.log('=== INIT ALL ===');
+    initSearch();
+    initFilters();
+    initRiderCardsData();
+    addTestButton();
 }
