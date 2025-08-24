@@ -94,6 +94,26 @@
             margin: 1rem 0;
             border-radius: 4px;
         }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
         
         footer {
             text-align: center;
@@ -125,6 +145,11 @@
             <h1>Условия использования приложения</h1>
             <p>Пожалуйста, внимательно ознакомьтесь с условиями перед использованием нашего приложения</p>
         </div>
+
+        <div class="nav-links">
+                <a href="{{ url_for('law_bp.privacy') }}">Политика конфиденциальности</a>
+                <a href="{{ url_for('main.index') }}">Главная страница</a>
+            </div>
     </header>
 
     <div class="container">
