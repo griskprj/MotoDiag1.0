@@ -157,7 +157,7 @@ const editPreviewPhoto = document.getElementById('edit-preview-photo');
 editPhotoUpload.addEventListener('click', () => editPhotoInput.click());
 
 editPhotoInput.addEventListener('change', function(e) {
-    if (e.target.files[0]) {
+    if (e.target.files[0]){
         const reader = new FileReader();
         reader.onload = function(event) {
             editPreviewPhoto.src = event.target.result;
