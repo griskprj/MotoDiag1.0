@@ -6,6 +6,7 @@
 
     <!-- PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FlaskApp">
@@ -16,6 +17,7 @@
 
     <title>YourMot - Обслуживание</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/service.css">
 </head>
@@ -149,61 +151,37 @@
             <!-- Быстрое добавление -->
             <section class="quick-add-section">
                 <h2 class="section-title">Быстрое добавление</h2>
-                <div class="quick-add-grid" data-service-type="Замена масляного фильтра">
-                    <button class="quick-add-btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="quick-add-grid">
+                    <button class="quick-add-btn" data-service-type="Замена масляного фильтра">
+                        <i class="service-icon">🛢️</i>
                         Замена масляного фильтра
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена воздушного фильтра">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 16V8M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">💨</i>
                         Замена воздушного фильтра
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена свечей зажигания">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 16V8M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">⚡</i>
                         Замена свечей зажигания
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена тормозной жидкости">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">🛑</i>
                         Замена тормозной жидкости
                     </button>
                     <button class="quick-add-btn" data-service-type="Смазка цепи">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">⛓️</i>
                         Смазка цепи
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена цепи">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">🔗</i>
                         Замена цепи
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена ремня">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">📏</i>
                         Замена ремня
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена масла в кардане">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">🔩</i>
                         Замена масла в кардане
                     </button>
                 </div>
@@ -217,42 +195,33 @@
                     <div class="history-item">
                         <div class="history-main">
                             <div class="history-icon">
-                                {% if record.type == 'oil' %}
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                {% elif record.type == 'filter' %}
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 12H2M5 12L5 19M19 12V19M12 12V19" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                {% else %}
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                {% endif %}
+                                {% if record.type == 'oil' %}🛢️
+                                {% elif record.type == 'filter' %}💨
+                                {% elif record.type == 'brakes' %}🛑
+                                {% elif record.type == 'chain' %}⛓️
+                                {% else %}🔧{% endif %}
                             </div>
                             <div class="history-details">
                                 <h4>{{ record.title }}</h4>
-                                <p>{{ record.moto_model }} • {{ record.date.strftime('%d.%m.%Y') }} •  {{ record.notes }}</p>
+                                <p>{{ record.moto_model }} • {{ record.date.strftime('%d.%m.%Y') }} • {{ record.notes }}</p>
                             </div>
                         </div>
                         <div class="history-meta">
-                            <div class="text-meta" style="flex-direction: column;">
+                            <div class="text-meta">
                                 <span class="mileage">{{ record.type }}</span>
                                 <span class="mileage">{{ record.mileage }} км</span>
                                 <span class="cost">{{ record.cost }} ₽</span>
                             </div>
                             {% if record.image %}
-                            <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id) }}" class="bike-list-image">
+                            <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id ) }}" class="history-image">
                             {% else %}
-                            <img src="/static/image/tools.png" class="bike-list-image">
+                            <div class="history-placeholder">📷</div>
                             {% endif %}
                         </div>
                     </div>
                     {% else %}
                     <div class="no-history">
-                        <p>История обслуживания пуста</p>
+                        <p>📝 История обслуживания пуста</p>
                     </div>
                     {% endfor %}
                 </div>

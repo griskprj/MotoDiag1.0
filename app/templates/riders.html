@@ -5,6 +5,7 @@
     
     <!-- PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FlaskApp">
@@ -114,7 +115,7 @@
                                 {% endif %}
                                 <div class="rider-info">
                                     <h3>{{ user.username }}</h3>
-                                    <p>мотоциклов</p>
+                                    <p>мотоциклов: {{ user.moto_count }}</p>
                                 </div>
                                 <div class="rider-badge">
                                     {% if user.is_online %}

@@ -6,6 +6,7 @@
 
     <!-- PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FlaskApp">
@@ -17,7 +18,7 @@
     <title>YourMot - {{ moto.model }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/index.css">
-    <link rel="stylesheet" href="/statics/css/moto.css">
+    <link rel="stylesheet" href="/static/css/moto.css">
 </head>
 <body>
     <header>
@@ -73,53 +74,66 @@
             <!-- Заголовок и фильтры -->
             <section class="section-header">
                 <h1 class="page-title">{{ moto.model }}</h1>
-                
             </section>
             
+            <!-- Карточка мотоцикла -->
             <section class="bikes-section">
-                <div class="bike-card-one_moto" style="cursor: default;">
+                <div class="bike-card-one_moto">
                     <img src="{{ url_for('moto.moto_image', moto_id=moto.id) }}" 
                         alt="{{ moto.model }}"
                         class="moto-image-one">
-                    <h3>{{ moto.model }}</h3>
-                    <div class="bike-info">
-                        <span>{{ moto.year }} год</span>
-                        <span>{{ moto.mileage}} км</span>
-                        <span>{{ moto.engine}} см³</span>
-                        <span>
-                            {% if moto.drive_type == "chain" %}Цепь
-                            {% elif moto.drive_type == "belt" %}Ремень
-                            {% elif moto.drive_type == "shaft" %}Кардан
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div class="bike-status" style="margin-bottom: 10px;">
-                        <div class="status-indicator status-{{ moto.condition }}">
-                            <div class="status-dot"></div>
-                            {{ moto.condition }}
+                    <div class="moto-card-content">
+                        <h3>{{ moto.model }}</h3>
+                        <div class="bike-info">
+                            <span class="info-item"><i class="icon">📅</i> {{ moto.year }} год</span>
+                            <span class="info-item"><i class="icon">🛣️</i> {{ moto.mileage}} км</span>
+                            <span class="info-item"><i class="icon">⚙️</i> {{ moto.engine}} см³</span>
+                            <span class="info-item">
+                                <i class="icon">
+                                    {% if moto.drive_type == "chain" %}⛓️
+                                    {% elif moto.drive_type == "belt" %}📏
+                                    {% elif moto.drive_type == "shaft" %}🔩{% endif %}
+                                </i>
+                                {% if moto.drive_type == "chain" %}Цепь
+                                {% elif moto.drive_type == "belt" %}Ремень
+                                {% elif moto.drive_type == "shaft" %}Кардан
+                                {% endif %}
+                            </span>
                         </div>
-                    </div>
-                    <div class="edit_buttons">
-                        <div class="first_btn">
-                            <button class="btn btn-secondary" style="height: 30px; padding: 3px 6px; font-size: 1rem; font-weight: 500;" onclick="openRedModal()">Редактировать</button>
-                            <button class="btn btn-secondary delete-btn" style="height: 30px; padding: 3px 6px; font-size: 1rem; font-weight: 500;" id="delete-btn">Удалить</button>
+                        <div class="bike-status">
+                            <div class="status-indicator status-{{ moto.condition }}">
+                                <div class="status-dot"></div>
+                                {{ moto.condition }}
+                            </div>
                         </div>
-                        <button class="btn btn-secondary" style="height: 30px; padding: 2px 5px; font-size: 1rem; font-weight: 500;" onclick="openMaintenanceModal()">Последнее обслуживание</button>
+                        <div class="edit_buttons">
+                            <button class="btn btn-secondary edit-btn" onclick="openRedModal()">
+                                <i class="icon">✏️</i> Редактировать
+                            </button>
+                            <button class="btn btn-secondary delete-btn" id="delete-btn">
+                                <i class="icon">🗑️</i> Удалить
+                            </button>
+                            <button class="btn btn-secondary maintenance-btn" onclick="openMaintenanceModal()">
+                                <i class="icon">🔧</i> Последнее обслуживание
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Предстоящее обслуживание -->
             <section class="maintenance-section">
-                <h2 class="section-title">Предстоящее обслуживание</h2>
-                <div class="filters" style="margin-bottom: 10px;">
-                    <select class="filter-select">
-                        <option value="all">Все типы работ</option>
-                        <option value="oil">Замена масла</option>
-                        <option value="filter">Фильтры</option>
-                        <option value="brakes">Тормоза</option>
-                        <option value="chain">Цепь/ремень/кардан</option>
-                    </select>
+                <div class="section-header">
+                    <h2 class="section-title">Предстоящее обслуживание</h2>
+                    <div class="filters">
+                        <select class="filter-select">
+                            <option value="all">Все типы работ</option>
+                            <option value="oil">Замена масла</option>
+                            <option value="filter">Фильтры</option>
+                            <option value="brakes">Тормоза</option>
+                            <option value="chain">Цепь/ремень/кардан</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="maintenance-list">
                     {% for item in upcoming_maintenance %}
@@ -137,17 +151,18 @@
                     </div>
                     {% else %}
                     <div class="no-maintenance">
-                        <p>Нет предстоящего обслуживания</p>
+                        <p>🎉 Нет предстоящего обслуживания</p>
                     </div>
                     {% endfor %}
                 </div>
             </section>
 
+            <!-- Обновление пробега -->
             <section class="update-mileage">
                 <h2 class="section-title">Обновление пробега</h2>
-                <div class="form-mileage">
-                    <form id="mileageForm" class="mileage-form">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <form id="mileageForm" class="mileage-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="motoSelectMileage">Мотоцикл</label>
                             <select name="moto_id" id="motoSelectMileage">
@@ -164,75 +179,52 @@
                             <label for="mileageDate">Дата обновления</label>
                             <input type="date" name="mileage_date" id="mileageDate" required>
                         </div>
-
-                        <button type="submit" class="btn">Обновить пробег</button>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="icon">🔄</i> Обновить пробег
+                    </button>
+                </form>
             </section>
 
             <!-- Быстрое добавление -->
             <section class="quick-add-section">
                 <h2 class="section-title">Быстрое добавление</h2>
-                <div class="quick-add-grid" data-service-type="Замена масляного фильтра">
-                    <button class="quick-add-btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="quick-add-grid">
+                    <button class="quick-add-btn" data-service-type="Замена масляного фильтра">
+                        <i class="service-icon">🛢️</i>
                         Замена масляного фильтра
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена воздушного фильтра">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 16V8M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">💨</i>
                         Замена воздушного фильтра
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена свечей зажигания">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 16V8M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">⚡</i>
                         Замена свечей зажигания
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена тормозной жидкости">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">🛑</i>
                         Замена тормозной жидкости
                     </button>
                     {% if moto.drive_type == "chain" %}
                     <button class="quick-add-btn" data-service-type="Смазка цепи">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">⛓️</i>
                         Смазка цепи
                     </button>
                     <button class="quick-add-btn" data-service-type="Замена цепи">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">🔗</i>
                         Замена цепи
                     </button>
                     {% endif %}
                     {% if moto.drive_type == "belt" %}
                     <button class="quick-add-btn" data-service-type="Замена ремня">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">📏</i>
                         Замена ремня
                     </button>
                     {% endif %}
                     {% if moto.drive_type == "shaft" %}
                     <button class="quick-add-btn" data-service-type="Замена масла в кардане">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 8V16M8 12H16" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="service-icon">🔩</i>
                         Замена масла в кардане
                     </button>
                     {% endif %}
@@ -247,42 +239,33 @@
                     <div class="history-item">
                         <div class="history-main">
                             <div class="history-icon">
-                                {% if record.type == 'oil' %}
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                {% elif record.type == 'filter' %}
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M22 12H2M5 12L5 19M19 12V19M12 12V19" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                {% else %}
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#7D3CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                {% endif %}
+                                {% if record.type == 'oil' %}🛢️
+                                {% elif record.type == 'filter' %}💨
+                                {% elif record.type == 'brakes' %}🛑
+                                {% elif record.type == 'chain' %}⛓️
+                                {% else %}🔧{% endif %}
                             </div>
                             <div class="history-details">
                                 <h4>{{ record.title }}</h4>
-                                <p>{{ record.moto_model }} • {{ record.date.strftime('%d.%m.%Y') }} •  {{ record.notes }}</p>
+                                <p>{{ record.moto_model }} • {{ record.date.strftime('%d.%m.%Y') }} • {{ record.notes }}</p>
                             </div>
                         </div>
                         <div class="history-meta">
-                            <div class="text-meta" style="flex-direction: column;">
+                            <div class="text-meta">
                                 <span class="mileage">{{ record.type }}</span>
                                 <span class="mileage">{{ record.mileage }} км</span>
                                 <span class="cost">{{ record.cost }} ₽</span>
                             </div>
                             {% if record.image %}
-                            <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id ) }}" class="bike-list-image">
+                            <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id ) }}" class="history-image">
                             {% else %}
-                            <img src="/static/image/tools.png" class="bike-list-image">
+                            <div class="history-placeholder">📷</div>
                             {% endif %}
                         </div>
                     </div>
                     {% else %}
                     <div class="no-history">
-                        <p>История обслуживания пуста</p>
+                        <p>📝 История обслуживания пуста</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -312,18 +295,18 @@
             </div>
             <form id="serviceForm" class="modal-form">
                 <input type="hidden" id="serviceType" name="service_type">
-                
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <div class="form-group">
                     <label for="motoSelect">Мотоцикл</label>
                     <select id="motoSelect" name="moto_id" required>
-                        <option value="">Выберите мотоцикл</option>
                         <option value="{{ moto.id }}">{{ moto.model }}</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="mileage">Пробег (км)</label>
-                    <input type="number" id="mileage" name="mileage" required>
+                    <input type="number" id="mileage" name="mileage" value="{{ moto.mileage }}" min="{{ moto.mileage }}" required>
                 </div>
                 
                 <div class="form-group">
@@ -345,7 +328,7 @@
             </form>
         </div>
     </div>
-
+    
     <!-- Модальное окно редактирования мотоцикла -->
     <div class="modal-overlay" id="editModal" style="display: none;">
         <div class="modal-container">
@@ -392,7 +375,7 @@
                     <label class="form-label" for="edit-engine">Объем двигателя (см³)</label>
                     <input type="number" id="edit-engine" name="engine" class="form-input" value="{{ moto.engine }}" min="50" required>
                 </div>
-
+    
                 <!-- Тип привода -->
                 <div class="form-group">
                     <label class="form-label" for="edit-drive-type">Тип привода</label>
@@ -420,7 +403,7 @@
             </form>
         </div>
     </div>
-
+    
     <!-- Модальное окно добавления последнего обслуживания-->
     <div class="modal-overlay" id="maintenanceModal" style="display: none;">
         <div class="modal-container">
@@ -432,7 +415,7 @@
             <form id="maintenanceForm" class="modal-form" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="moto_id" value="{{ moto.id }}">
-
+    
                 <div class="form-group">
                     <label for="maintenance-brake-fluid" class="form-label">Замена тормозной жидкости</label>
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input" id="maintenance-brake-liquid" name="brake-liquid">
@@ -442,7 +425,7 @@
                     <label for="maintenance-oil-filter" class="form-label">Замена масляного фильтра</label>
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input" id="maintenance-oil-filter" name="oil-filter">
                 </div>
-
+    
                 <div class="form-group">
                     <label for="maintenance-air-filter" class="form-label">Замена воздушного фильтра</label>
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input" id="maintenance-air-filter" name="air-filter">
@@ -452,13 +435,13 @@
                     <label for="maintenance-spark-plug" class="form-label">Замена свечей зажигания</label>
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input" id="maintenance-spark-plug" name="spark-plug">
                 </div>
-
+    
                 {% if moto.drive_type == "chain" %}
                 <div class="form-group">
                     <label for="maintenance-chain-lubricate" class="form-label">Смазка цепи</label>
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input" id="maintenance-chain-lubricate" name="chain-lubricate">
                 </div>
-
+    
                 <div class="form-group">
                     <label for="maintenance-chain-change" class="form-label">Замена цепи</label>
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input" id="maintenance-chain-change" name="chain-change">
@@ -474,7 +457,7 @@
                     <input type="number" min=0 max={{ moto.mileage }} class="form-input-change-oil-shift" id="maintenance-" name="change-oil-shift">
                 </div>
                 {% endif %}
-
+    
                 <button type="submit" class="btn">Добавить</button>
             </form>
         </div>

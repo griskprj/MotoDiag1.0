@@ -1,35 +1,579 @@
-.replace-photo-container {
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
+/* ========== MOTO PAGE SPECIFIC STYLES ========== */
 
-#replace-photo-btn {
-    padding: 10px 15px;
-    font-size: 0.9rem;
-}
-
+/* Карточка мотоцикла */
 .bike-card-one_moto {
-    height: 550px;
+    background: linear-gradient(145deg, rgba(26,15,47,0.8), rgba(58,43,86,0.6));
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(125, 60, 255, 0.2);
+    transition: all 0.3s ease;
+    width: 100%;
+    min-height: 680px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.edit_buttons {
+.bike-card-one_moto::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+}
+
+.moto-card-content {
+    flex: 1;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.moto-image-one {
+    border-radius: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.moto-image-one:hover {
+    transform: scale(1.02);
+}
+
+.bike-card-one_moto h3 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    color: var(--text-main);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.bike-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    background: rgba(125, 60, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(125, 60, 255, 0.2);
+}
+
+.info-item .icon {
+    font-size: 1rem;
+}
+
+.bike-status {
+    margin: 10px 0 20px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: fit-content;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Кнопки редактирования */
+.edit_buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: auto;
+}
+
+.edit-btn, .delete-btn, .maintenance-btn {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid;
+}
+
+.edit-btn {
+    background: linear-gradient(45deg, var(--accent-purple), #9D50FF);
+    border-color: transparent;
+}
+
+.delete-btn {
+    background: rgba(255, 82, 82, 0.2);
+    border-color: rgba(255, 82, 82, 0.3);
+    color: #FF5252;
+}
+
+.maintenance-btn {
+    background: rgba(0, 240, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.3);
+    color: var(--accent-cyan);
+}
+
+.edit-btn:hover, .delete-btn:hover, .maintenance-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Секции */
+.maintenance-section, .update-mileage, .quick-add-section, .history-section {
+    background: linear-gradient(145deg, rgba(26,15,47,0.7), rgba(58,43,86,0.5));
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(125, 60, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
     gap: 10px;
 }
 
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 25px;
+    height: 3px;
+    background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
+}
+
+/* Форма пробега */
+.update-mileage .mileage-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.mileage-form .btn-primary {
+    align-self: flex-start;
+    padding: 12px 30px;
+    background: linear-gradient(45deg, var(--accent-purple), #9D50FF);
+    border: none;
+    border-radius: 12px;
+}
+
+/* Быстрое добавление */
+.quick-add-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.quick-add-btn {
+    padding: 20px 15px;
+    background: linear-gradient(145deg, rgba(26,15,47,0.6), rgba(58,43,86,0.4));
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(125, 60, 255, 0.1);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.quick-add-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(125, 60, 255, 0.2);
+    border-color: rgba(125, 60, 255, 0.3);
+    background: linear-gradient(145deg, rgba(125, 60, 255, 0.2), rgba(58,43,86,0.3));
+}
+
+.service-icon {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+/* История обслуживания */
+.history-list {
+    display: grid;
+    gap: 15px;
+}
+
+.history-item {
+    background: linear-gradient(145deg, rgba(26,15,47,0.6), rgba(58,43,86,0.4));
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid rgba(125, 60, 255, 0.1);
+    transition: all 0.3s ease;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(125, 60, 255, 0.15);
+    border-color: rgba(125, 60, 255, 0.3);
+}
+
+.history-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.history-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(125, 60, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: 1px solid rgba(125, 60, 255, 0.2);
+}
+
+.history-details h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: var(--text-main);
+}
+
+.history-details p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.history-meta {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+
+.text-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.mileage, .cost {
+    font-size: 0.9rem;
+}
+
+.mileage {
+    color: var(--accent-cyan);
+}
+
+.cost {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.history-image {
+    width: 256px;
+    height: 128px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid rgba(125, 60, 255, 0.2);
+}
+
+.history-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: rgba(125, 60, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: 1px dashed rgba(125, 60, 255, 0.3);
+}
+
+/* Предстоящее обслуживание */
+.maintenance-list {
+    display: grid;
+    gap: 12px;
+}
+
+.maintenance-item {
+    background: rgba(10, 4, 26, 0.4);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--accent-purple);
+    transition: all 0.3s ease;
+}
+
+.maintenance-item:hover {
+    background: rgba(26, 15, 47, 0.6);
+    transform: translateX(5px);
+}
+
+.maintenance-item.minus {
+    border-left: 4px solid #FF5252;
+    background: rgba(255, 82, 82, 0.1);
+}
+
+.maintenance-info h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+.maintenance-info p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.maintenance-date {
+    text-align: right;
+}
+
+.maintenance-date .date {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--accent-cyan);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.maintenance-date .remaining {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.no-maintenance, .no-history {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+    background: rgba(125, 60, 255, 0.05);
+    border-radius: 12px;
+    border: 1px dashed rgba(125, 60, 255, 0.2);
+}
+
+.no-maintenance p, .no-history p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Фильтры */
+.filters {
+    display: flex;
+    gap: 12px;
+}
+
+.filter-select {
+    padding: 10px 20px;
+    background: rgba(125, 60, 255, 0.1);
+    border: 1px solid rgba(125, 60, 255, 0.2);
+    border-radius: 10px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:hover {
+    background: rgba(125, 60, 255, 0.2);
+    border-color: rgba(125, 60, 255, 0.3);
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
     .bike-card-one_moto {
-        height: 600px;
-        flex-direction: column;
-
+        height: auto;
+        min-height: 500px;
     }
-
-    .edit_buttons {
-        align-content: space-around;
+    
+    .section-header {
+        flex-direction: column;
         align-items: flex-start;
-        flex-wrap: wrap;
+    }
+    
+    .edit_buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-add-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .history-meta {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .text-meta {
+        align-items: flex-start;
+    }
+    
+    .maintenance-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .maintenance-date {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .bike-info {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .bike-card-one_moto {
+        padding: 20px;
+    }
+    
+    .moto-image-one {
+        height: 280px;
+    }
+    
+    .bike-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+    }
+    
+    .history-main {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
+    
+    .history-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.maintenance-section, .update-mileage, .quick-add-section, .history-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.bike-card-one_moto {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Иконки */
+.icon {
+    font-style: normal;
+}
+
+.service-icon {
+    font-style: normal;
+}
+
+/* Улучшенные статусы */
+.status-Отличное .status-dot {
+    background: #00FFA3;
+    box-shadow: 0 0 15px #00FFA3;
+}
+
+.status-Хорошее .status-dot {
+    background: #91ff00;
+    box-shadow: 0 0 15px #91ff00;
+}
+
+.status-Среднее .status-dot {
+    background: #FFC107;
+    box-shadow: 0 0 15px #FFC107;
+}
+
+.status-Плохое .status-dot {
+    background: #FF5252;
+    box-shadow: 0 0 15px #FF5252;
+}
+
+.status-Критическое .status-dot {
+    background: #610404;
+    box-shadow: 0 0 15px #610404;
 }
