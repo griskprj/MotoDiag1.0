@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlaskApp">
+    <link rel="apple-touch-icon" href="/static/ico_192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+    
+    <title>YourMot - Ошибка сервера</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/500.css">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <div class="engine-icon">
+                <div class="engine-part"></div>
+                <div class="engine-part middle"></div>
+                <div class="engine-part"></div>
+                <div class="smoke"></div>
+                <div class="smoke delay"></div>
+            </div>
+            
+            <div class="error-number">500</div>
+            <h1 class="error-title">Двигатель сервера заглох!</h1>
+            <p class="error-text">
+                Наш сервер столкнулся с непредвиденной проблемой, 
+                как мотор в самый неподходящий момент. 
+                Наши механики уже работают над устранением неполадки. 
+                Попробуйте перезапустить запрос или зайдите позже.
+            </p>
+            
+            <div class="engine-diagnostics">
+                <div class="diagnostic-line">
+                    <span class="diag-label">Статус:</span>
+                    <span class="diag-value error">КРИТИЧЕСКИЙ СБОЙ</span>
+                </div>
+                <div class="diagnostic-line">
+                    <span class="diag-label">Код ошибки:</span>
+                    <span class="diag-value">INTERNAL_SERVER_ERROR</span>
+                </div>
+            </div>
+            
+            <a href="/" class="btn-home">Завести снова</a>
+        </div>
+
+        <!-- Индикатор перегрева -->
+        <div class="overheat-warning">
+            <div class="temperature-bar">
+                <div class="temp-fill"></div>
+            </div>
+            <span>ПЕРЕГРЕВ СЕРВЕРА: Температура превышена</span>
+        </div>
+    </div>
+
+    <script>
+        // Анимация дыма
+        document.addEventListener('DOMContentLoaded', function() {
+            const tempFill = document.querySelector('.temp-fill');
+            let temp = 0;
+            
+            const heatUp = setInterval(() => {
+                temp += 5;
+                tempFill.style.width = Math.min(temp, 100) + '%';
+                
+                if (temp >= 100) {
+                    clearInterval(heatUp);
+                    
+                    // Мигание при перегреве
+                    setInterval(() => {
+                        tempFill.style.backgroundColor = tempFill.style.backgroundColor === 'red' 
+                            ? '#ff5252' 
+                            : 'red';
+                    }, 500);
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
