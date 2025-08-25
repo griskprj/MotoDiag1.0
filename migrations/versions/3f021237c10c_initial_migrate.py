@@ -1,8 +1,8 @@
-"""Initia migrate
+"""Initial migrate
 
-Revision ID: 19a2d57893d8
+Revision ID: 3f021237c10c
 Revises: 
-Create Date: 2025-08-22 23:57:15.962205
+Create Date: 2025-08-25 20:06:06.088034
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '19a2d57893d8'
+revision = '3f021237c10c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -74,8 +74,7 @@ def upgrade():
     sa.Column('token', sa.String(length=200), nullable=False),
     sa.Column('token_expiration', sa.DateTime(), nullable=False),
     sa.Column('used', sa.Boolean(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('token', name='uq_password_reset_token')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pending_registrations',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -85,25 +84,18 @@ def upgrade():
     sa.Column('verification_token', sa.String(length=32), nullable=False),
     sa.Column('token_expiration', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('username'),
-    sa.UniqueConstraint('username', name='uq_pending_username')
+    sa.UniqueConstraint('username')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=100), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
+    sa.Column('email_confirmed', sa.Boolean(), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=False),
     sa.Column('first_reg', sa.Integer(), nullable=True),
     sa.Column('join_date', sa.DateTime(), nullable=True),
-    sa.Column('is_confirmed', sa.Boolean(), nullable=True),
-    sa.Column('confirmation_token', sa.String(length=100), nullable=True),
-    sa.Column('confirmation_sent_at', sa.DateTime(), nullable=True),
     sa.Column('image', sa.LargeBinary(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('confirmation_token'),
-    sa.UniqueConstraint('confirmation_token', name='uq_user_confirmation_token'),
-    sa.UniqueConstraint('email', name='uq_user_email'),
-    sa.UniqueConstraint('username', name='uq_user_username')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('subscriptions',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -112,8 +104,7 @@ def upgrade():
     sa.Column('date_subscribed', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['subscribed_to_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['subscriber_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('subscriber_id', 'subscribed_to_id', name='uq_subscription_pair')
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 

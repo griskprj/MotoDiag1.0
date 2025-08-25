@@ -82,6 +82,9 @@ def add_maintenance():
                     "message": "Пробег не может быть меньше текущего"
                 }), 400
             
+            if cost == None:
+                cost = 0
+            
             #get_photo
             image_file = request.files.get('meintenance_image')
             image_data = None
@@ -139,6 +142,7 @@ def update_last_mainenance():
     if request.method == "POST":
         try:
             moto_id = request.form.get('moto_id')
+            print(moto_id)
             moto = Motorcycle.query.filter_by(id=moto_id, owner_id=current_user.id).first()
             if not moto:
                 return jsonify({"success": False, "message": "Мотоцикл не найден"}), 404
@@ -146,6 +150,8 @@ def update_last_mainenance():
             elements = ElementsFluid.query.filter_by(moto_id=moto_id).first()
             if not elements:
                 return jsonify({"success": False, "message": "Данные обслуживания не найдены"}), 404
+            
+            
             
             maintenenace_fields = {
                 'brake-liquid': ('brake_fluid', 'brake_fluid_mileage'),
@@ -162,10 +168,15 @@ def update_last_mainenance():
                 mileage_value = request.form.get(filed_name)
                 if mileage_value:
                     mileage = int(mileage_value)
-                    if mileage > 0:
+                    if mileage >= 0:
                         setattr(elements, status_field, True)
                         setattr(elements, mileage_field, mileage)
                         setattr(elements, f"{status_field}_date", datetime.utcnow())
+                    elif not mileage:
+                        setattr(elements,status_field, True)
+                        setattr(elements, mileage_field, 0)
+                        setattr(elements, f"{status_field}_date", datetime.utcnow())
+
             
             db.session.commit()
             

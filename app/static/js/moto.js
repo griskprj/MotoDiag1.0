@@ -290,38 +290,24 @@ document.getElementById('maintenanceForm').addEventListener('submit', async func
     e.preventDefault();
     
     const formData = new FormData(this);
-    const motoId = formData.get('moto_id');
     
     try {
-        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
-
-        const response = await fetch('/maintenance/update_last_maintenance', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': csrfToken
-            },
-            body: JSON.stringify({
-                        csrf_token: csrfToken  // Добавляем токен и в тело запроса
-            })
+        const response = await fetch('/moto/update_last_maintenance', {
+            method: "POST",
+            body: formData
         });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Ошибка сервера');
-        }
         
         const result = await response.json();
         
-        if (result.success) {
+        if(result.success) {
             alert(result.message);
-            document.getElementById('maintenanceModal').style.display = 'none';
-            location.reload(); // Обновляем страницу для отображения изменений
+            document.getElementById('maintenanceForm').style.display = 'none';
+            location.reload();
         } else {
             alert(result.message);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Ошибка при сохранении данных: ' + error.message);
+        alert('Произошла ошибка при отправке данных');
     }
-});
+})
