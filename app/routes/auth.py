@@ -1,9 +1,13 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, current_app, jsonify
 from flask_login import current_user, logout_user, login_user, login_required
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from app.extension import db, limiter
 from app.models import User
+from app.utils.send_email import send_confirmation_email
+import os
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
 
@@ -26,7 +30,11 @@ def login():
             flash('Неверные учетные данные', 'danger')
             return redirect(url_for('auth_bp.login'))
         
-        login_user(user, remember=remember)
+        if not user.email_confirmed:
+            flash('Подтвердите email перед входом', 'danger')
+            return redirect(url_for('auth_bp.login'))
+        
+        login_user(user, remember=True)
         flash('Вы успешно вошли в систему', 'success')
         return redirect(url_for('main.index'))
     
@@ -57,6 +65,10 @@ def register():
             flash('Email уже зарегистрирован', 'danger')
             return redirect(url_for('auth_bp.register'))
         
+        if len(password) < 6:
+            flash('Пароль должен быть длиннее 6 символов', 'danger')
+            return redirect(url_for('auth_bp.register'))
+        
         try:
             user = User(
                 username=username,
@@ -66,12 +78,15 @@ def register():
             
             db.session.add(user)
             db.session.commit()
+
+            send_confirmation_email(user)
             
-            flash('Регистрация успешна. Теперь вы можете войти', 'success')
-            
+            flash('Регистрация успешна. Проверьте вашу почту для подтверждения email', 'success')
             return redirect(url_for('auth_bp.login'))
         
         except Exception as e:
+            db.session.delete(user)
+            db.session.commit()
             db.session.rollback()
             current_app.logger.error(f"Ошибка регистрации: {e}")
             flash('Ошибка при регистрации. Повторите попытку позднее', 'danger')
@@ -100,3 +115,41 @@ def user_image(user_id):
             mimetype='image/jpg',
             as_attachment=False
         )
+
+''' EMAIL CONFIRMATION '''
+@auth_bp.route("/confirm/<token>")
+@limiter.limit("5 per minute")
+def confirm_email(token):
+    try:
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        email = serializer.loads(
+            token,
+            salt=current_app.config['SECURITY_PASSWORD_SALT'],
+            max_age=3600 # 1 hour
+        )
+    except:
+        flash('Ссылка просрочена или недействительна', 'danger')
+        return redirect(url_for('auth_bp.login'))
+    
+    user = User.query.filter_by(email=email).first_or_404()
+
+    if user.email_confirmed:
+        flash('Аккаунт уже подтвержден ', 'info')
+    else:
+        user.email_confirmed = True
+        db.session.commit()
+        flash('Email успешно подтвержден!', 'success')
+    
+    return redirect(url_for('main.index'))
+
+''' RESED CONFIRMATION '''
+@auth_bp.route("/resend_confirmation")
+@limiter.limit("5 per minute")
+def resend_confirmation():
+    if current_user.email_confirmed:
+        flash('Ваш email уже подтвержден', 'info')
+        return redirect(url_for('main.index'))
+    
+    send_confirmation_email(current_user)
+    flash('Новое письмо с подтверждением отправлено на ваш email', 'info')
+    return redirect(url_for('main.index'))
