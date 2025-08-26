@@ -167,7 +167,7 @@ def update_last_mainenance():
                 
                 # Пропускаем пустые поля
                 if not mileage_value or mileage_value.strip() == '':
-                    continue
+                    mileage_value = 0
                 
                 try:
                     mileage = int(mileage_value)
