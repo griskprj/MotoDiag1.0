@@ -292,7 +292,7 @@ document.getElementById('maintenanceForm').addEventListener('submit', async func
     const formData = new FormData(this);
     
     try {
-        const response = await fetch('/moto/update_last_maintenance', {
+        const response = await fetch('/maintenance/update_last_maintenance', {
             method: "POST",
             body: formData
         });

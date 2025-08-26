@@ -138,11 +138,11 @@ def add_maintenance():
         
 ''' ДОБАВЛЕНИЕ ПОСЛЕДНЕГО ОБСЛУЖИВАНИЯ МОТОЦИКЛА (КОМПЛЕКСНО) '''
 @maintenance_bp.route("/update_last_maintenance", methods=['POST'])
+@login_required
 def update_last_mainenance():
     if request.method == "POST":
         try:
             moto_id = request.form.get('moto_id')
-            print(moto_id)
             moto = Motorcycle.query.filter_by(id=moto_id, owner_id=current_user.id).first()
             if not moto:
                 return jsonify({"success": False, "message": "Мотоцикл не найден"}), 404
@@ -151,9 +151,7 @@ def update_last_mainenance():
             if not elements:
                 return jsonify({"success": False, "message": "Данные обслуживания не найдены"}), 404
             
-            
-            
-            maintenenace_fields = {
+            maintenance_fields = {
                 'brake-liquid': ('brake_fluid', 'brake_fluid_mileage'),
                 'oil-filter': ('oil_filter', 'oil_filter_mileage'),
                 'air-filter': ('air_filter', 'air_filter_mileage'),
@@ -164,33 +162,49 @@ def update_last_mainenance():
                 'change-oil-shift': ('drive_maintenance', 'drive_maintenance_mileage'),
             }
 
-            for filed_name, (status_field, mileage_field) in maintenenace_fields.items():
-                mileage_value = request.form.get(filed_name)
-                if mileage_value:
+            for field_name, (status_field, mileage_field) in maintenance_fields.items():
+                mileage_value = request.form.get(field_name)
+                
+                # Пропускаем пустые поля
+                if not mileage_value or mileage_value.strip() == '':
+                    continue
+                
+                try:
                     mileage = int(mileage_value)
-                    if mileage >= 0:
-                        setattr(elements, status_field, True)
-                        setattr(elements, mileage_field, mileage)
-                        setattr(elements, f"{status_field}_date", datetime.utcnow())
-                    elif not mileage:
-                        setattr(elements,status_field, True)
-                        setattr(elements, mileage_field, 0)
-                        setattr(elements, f"{status_field}_date", datetime.utcnow())
+                    
+                    # Проверяем, что пробег в допустимых пределах
+                    if mileage < 0:
+                        return jsonify({
+                            "success": False,
+                            "message": f"Пробег для {field_name} не может быть отрицательным"
+                        }), 400
+                    
+                    if mileage > moto.mileage:
+                        return jsonify({
+                            "success": False,
+                            "message": f"Пробег обслуживания не может быть больше текущего пробега мотоцикла"
+                        }), 400
+                    
+                    # Обновляем данные
+                    setattr(elements, status_field, True)
+                    setattr(elements, mileage_field, mileage)
+                    setattr(elements, f"{status_field}_date", datetime.utcnow())
+                    
+                except ValueError:
+                    return jsonify({
+                        "success": False,
+                        "message": f"Некорректное значение пробега для {field_name}"
+                    }), 400
 
-            
             db.session.commit()
             
             return jsonify({"success": True, "message": "Данные успешно обновлены"})
         
-        except ValueError:
-            return jsonify({
-                "success": False,
-                "message": "Некорректное значение пробега"
-            }), 400
         except Exception as e:
+            db.session.rollback()
             return jsonify({
                 "success": False,
-                "message": f"Ошибка: {str(e)}"
+                "message": f"Ошибка сервера: {str(e)}"
             }), 500
     
     return jsonify({"success": False, "message": "Недопустимый метод запроса"}), 405
