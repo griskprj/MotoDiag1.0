@@ -5,7 +5,6 @@
 
     <!-- PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FlaskApp">
@@ -14,21 +13,21 @@
     <!-- Manifest -->
     <link rel="manifest" href="/static/manifest.json">
     
-    <title>YourMot - Вход</title>
+    <title>MotoDiag - Вход</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/login.css">
 </head>
 <body>
     <div class="login-container">
         <div class="logo">
-            <h1>YourMot</h1>
+            <h1>MotoDiag</h1>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <p class="form-{{ category }}">{{ message }}</p>
+                    <div class="form form-{{ category }}">
+                        {{ message }}
                     </div>
                 {% endfor %}
             {% endif %}
@@ -68,13 +67,14 @@
                     <input type="checkbox">
                     Запомнить меня
                 </label>
+                <a href="#" class="forgot-password">Забыли пароль?</a>
             </div>
 
             <button type="submit" class="btn-login">Войти</button>
         </form>
 
         <div class="register-link">
-            Нет аккаунта? <a href="{{ url_for('auth_bp.register') }}">Зарегистрироваться</a>
+            Нет аккаунта? <a href="{{ url_for('auth_bp.register')}}">Зарегистрироваться</a>
         </div>
     </div>
 </body>

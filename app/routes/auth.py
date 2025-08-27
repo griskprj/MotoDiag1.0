@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from app.extension import db, limiter
 from app.models import User
 from app.utils.send_email import send_confirmation_email
-import os
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
 
@@ -34,7 +33,7 @@ def login():
             flash('Подтвердите email перед входом', 'danger')
             return redirect(url_for('auth_bp.login'))
         
-        login_user(user, remember=True)
+        login_user(user, remember=remember)
         flash('Вы успешно вошли в систему', 'success')
         return redirect(url_for('main.index'))
     
@@ -51,7 +50,7 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        
+
         # Валидация данных
         if not all([username, email, password]):
             flash('Заполните все поля', 'danger')
@@ -63,10 +62,6 @@ def register():
         
         if User.query.filter_by(email=email).first():
             flash('Email уже зарегистрирован', 'danger')
-            return redirect(url_for('auth_bp.register'))
-        
-        if len(password) < 6:
-            flash('Пароль должен быть длиннее 6 символов', 'danger')
             return redirect(url_for('auth_bp.register'))
         
         try:
@@ -85,8 +80,6 @@ def register():
             return redirect(url_for('auth_bp.login'))
         
         except Exception as e:
-            db.session.delete(user)
-            db.session.commit()
             db.session.rollback()
             current_app.logger.error(f"Ошибка регистрации: {e}")
             flash('Ошибка при регистрации. Повторите попытку позднее', 'danger')
@@ -101,6 +94,7 @@ def logout():
     flash('Вы успешно вышли из системы', 'success')
     return redirect(url_for('auth_bp.login'))
 
+''' USER AVATAR '''
 @auth_bp.route("/user_image/<int:user_id>")
 @login_required
 def user_image(user_id):

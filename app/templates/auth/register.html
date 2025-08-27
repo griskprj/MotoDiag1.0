@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+form<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
 
     <!-- PWA -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FlaskApp">
@@ -14,21 +13,21 @@
     <!-- Manifest -->
     <link rel="manifest" href="/static/manifest.json">
     
-    <title>YourMot - Регистрация</title>
+    <title>MotoDiag - Регистрация</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/register.css">
 </head>
 <body>
     <div class="register-container">
         <div class="logo">
-            <h1>YourMot</h1>
+            <h1>MotoDiag</h1>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <p class="form-{{ category }}">{{ message }}</p>
+                    <div class="form form-{{ category }}">
+                        {{ message }}
                     </div>
                 {% endfor %}
             {% endif %}
@@ -70,13 +69,6 @@
                     name="password"
                     required
                 >
-            </div>
-
-            <div class="additional-actions">
-                <label class="remember-me" style="color: var(--text-main);">
-                    <input type="checkbox" style="min-width: 18px;" required>
-                    <p>Я согласен с <a href="{{ url_for('law_bp.policy') }}" style="color: var(--accent-cyan);">политикой конфиденциальности</a> и <a href="{{ url_for('law_bp.terms_for_use') }}" style="color: var(--accent-cyan);">условиями использования</a></p>
-                </label>
             </div>
 
             <button type="submit" class="btn-register">Создать аккаунт</button>
