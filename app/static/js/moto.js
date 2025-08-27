@@ -56,6 +56,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
 document.getElementById('mileageForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
+    confirm("Вы уверены, что хотите продолжить? Если вы указали пробег меньше текущего, то все записи обслуживания с пробегом больше нового буду удалены.")
     const formData = new FormData(this);
     
     try {
