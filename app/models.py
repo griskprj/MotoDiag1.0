@@ -99,7 +99,7 @@ class MaintenanceHistory(db.Model):
     moto_id = db.Column(db.Integer, nullable=False)
     service_type = db.Column(db.String(50), nullable=False)
     mileage = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.DateTime, default=datetime.utcnow())
     cost = db.Column(db.Integer)
     notes = db.Column(db.Text)
     image = db.Column(db.LargeBinary)

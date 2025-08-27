@@ -109,7 +109,10 @@ def add_maintenance():
             db.session.add(new_record)
 
             elements = ElementsFluid.query.filter_by(moto_id=moto_id).first()
+            print(elements)
+
             if elements:
+                print("CONDITION TRUE")
                 service_mapping = {
                     'Замена масляного фильтра': 'oil_filter',
                     'Замена воздушного фильтра': 'air_filter',
@@ -121,14 +124,20 @@ def add_maintenance():
                     'Обслуживание кардана': 'drive_maintenance',
                     'Замена масла в кардане': 'drive_maintenance'
                 }
+                print(f"Service type len: {len(service_type)}")
+                print(f"Service type received: '{service_type}'")
+                print(f"Available keys: {list(service_mapping.keys())}")
 
                 if service_type in service_mapping:
+                    print("SERVICE TYPE ENTER")
                     element = service_mapping[service_type]
                     setattr(elements, element, True)
                     setattr(elements, f"{element}_date", date)
                     setattr(elements, f"{element}_mileage", mileage)
+                    
 
             db.session.commit()
+            print("COMMIT")
             
             return jsonify({'success': True, 'message': 'Обслуживание успешно добавлено'})
         

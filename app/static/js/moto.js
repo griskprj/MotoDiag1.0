@@ -1,7 +1,7 @@
 // Открытие модального окна
 document.querySelectorAll('.quick-add-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-        const serviceType = this.textContent.trim();
+        const serviceType = this.dataset.serviceType;
         document.getElementById('serviceType').value = serviceType;
         document.getElementById('serviceModal').style.display = 'flex';
     });
@@ -19,7 +19,7 @@ document.querySelector('.modal-overlay').addEventListener('click', function(e) {
     }
 });
 
-// Отправка формы
+// Отправка формы обслуживания
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -30,7 +30,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': '{{ csrf_token() }}' // Добавляем CSRF токен
+                'X-CSRFToken': '{{ csrf_token() }}'
             }
         });
         
@@ -40,7 +40,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
             alert(result.message);
             document.getElementById('serviceModal').style.display = 'none';
             this.reset();
-            // Обновляем страницу или добавляем запись динамически
+            
             location.reload();
         } else {
             alert(result.message);
@@ -234,7 +234,7 @@ if (deleteBtn) {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token() }}' // Добавляем CSRF токен
+                    'X-CSRFToken': '{{ csrf_token() }}'
                 }
             })
             .then(response => {
