@@ -250,6 +250,7 @@
                 <button class="close-modal">&times;</button>
             </div>
             <form id="serviceForm" class="modal-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" id="serviceType" name="service_type">
                 
                 <div class="form-group">
@@ -290,7 +291,7 @@
                         <div class="photo-upload-text">Добавить фото</div>
                         <div class="photo-upload-hint">Нажмите для загрузки (макс. 2 МБ)</div>
                     </div>
-                    <input type="file" id="photoInput" name="meintenance_image" accept="image/*" style="display: none;">
+                    <input type="file" id="photoInput" name="maintenance_image" accept="image/*" style="display: none;">
                     <img src="" alt="Предпросмотр" class="preview-photo" id="photoPreview">
                     <div id="photoError" style="color: red; display: none; margin-top: 5px;"></div>
                 </div>
