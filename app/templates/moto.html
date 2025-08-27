@@ -254,7 +254,12 @@
                             <div class="text-meta">
                                 <span class="mileage">{{ record.type }}</span>
                                 <span class="mileage">{{ record.mileage }} км</span>
-                                <span class="cost">{{ record.cost }} ₽</span>
+                                {% if record.cost == 0 %}
+                                    <span class="cost">Бесплатно</span>
+                                {% else %}
+                                    <span class="cost">{{ record.cost }} ₽</span>
+                                {% endif %}
+
                             </div>
                             {% if record.image %}
                             <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id ) }}" class="history-image">
@@ -294,9 +299,9 @@
                 <button class="close-modal">&times;</button>
             </div>
             <form id="serviceForm" class="modal-form">
-                <input type="hidden" id="serviceType" name="service_type">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
+                <input type="hidden" id="serviceType" name="service_type">
+                
                 <div class="form-group">
                     <label for="motoSelect">Мотоцикл</label>
                     <select id="motoSelect" name="moto_id" required>
@@ -306,7 +311,7 @@
                 
                 <div class="form-group">
                     <label for="mileage">Пробег (км)</label>
-                    <input type="number" id="mileage" name="mileage" value="{{ moto.mileage }}" min="{{ moto.mileage }}" required>
+                    <input type="number" id="mileage" name="mileage" value="{{ moto.mileage }}">
                 </div>
                 
                 <div class="form-group">
@@ -316,12 +321,24 @@
                 
                 <div class="form-group">
                     <label for="cost">Стоимость (₽)</label>
-                    <input type="number" id="cost" name="cost" required>
+                    <input type="number" id="cost" name="cost">
                 </div>
                 
                 <div class="form-group">
                     <label for="notes">Примечания</label>
                     <textarea id="notes" name="notes" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Фото работы</label>
+                    <div class="photo-upload" id="photoUploadArea">
+                        <div class="photo-upload-icon">📷</div>
+                        <div class="photo-upload-text">Добавить фото</div>
+                        <div class="photo-upload-hint">Нажмите для загрузки (макс. 2 МБ)</div>
+                    </div>
+                    <input type="file" id="photoInput" name="maintenance_image" accept="image/*" style="display: none;">
+                    <img src="" alt="Предпросмотр" class="preview-photo" id="photoPreview">
+                    <div id="photoError" style="color: red; display: none; margin-top: 5px;"></div>
                 </div>
                 
                 <button type="submit" class="btn">Сохранить</button>
@@ -465,5 +482,17 @@
 
     <script src="/static/js/burger-menu.js"></script>
     <script src="/static/js/moto.js"></script>
+    <script>
+        function formatDate() {
+            let date = new Date();
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let year = date.getFullYear();
+
+            return `${year}-${month}-${day}`;
+        }
+
+        document.querySelector('#date').value = formatDate();
+    </script>
 </body>
 </html>

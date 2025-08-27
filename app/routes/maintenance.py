@@ -82,11 +82,11 @@ def add_maintenance():
                     "message": "Пробег не может быть меньше текущего"
                 }), 400
             
-            if cost == None:
+            if cost == None or cost == "":
                 cost = 0
             
             #get_photo
-            image_file = request.files.get('meintenance_image')
+            image_file = request.files.get('maintenance_image')
             image_data = None
             if image_file:
                 image_data = image_file.read()
@@ -112,7 +112,6 @@ def add_maintenance():
             print(elements)
 
             if elements:
-                print("CONDITION TRUE")
                 service_mapping = {
                     'Замена масляного фильтра': 'oil_filter',
                     'Замена воздушного фильтра': 'air_filter',
@@ -124,12 +123,8 @@ def add_maintenance():
                     'Обслуживание кардана': 'drive_maintenance',
                     'Замена масла в кардане': 'drive_maintenance'
                 }
-                print(f"Service type len: {len(service_type)}")
-                print(f"Service type received: '{service_type}'")
-                print(f"Available keys: {list(service_mapping.keys())}")
 
                 if service_type in service_mapping:
-                    print("SERVICE TYPE ENTER")
                     element = service_mapping[service_type]
                     setattr(elements, element, True)
                     setattr(elements, f"{element}_date", date)
@@ -137,7 +132,6 @@ def add_maintenance():
                     
 
             db.session.commit()
-            print("COMMIT")
             
             return jsonify({'success': True, 'message': 'Обслуживание успешно добавлено'})
         
