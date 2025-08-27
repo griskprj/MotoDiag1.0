@@ -202,12 +202,19 @@ def update_motorcycle():
             
             if mileage < 0 or engine < 50:
                 return jsonify({"success": False, "message": "Пробег или объем двигателя не могут быть отрицательными"})
+
         except ValueError:
             return jsonify({"success":False, "message": "Получена строка, но ожидалось число"})
         
         moto = Motorcycle.query.filter_by(id=moto_id, owner_id=current_user.id).first()
         if not moto:
             return jsonify({"success": False, "message": "Мотоцикл не найден"}), 404
+        
+        if mileage < moto.mileage:
+            maintenance_history = MaintenanceHistory.query.filter(
+                MaintenanceHistory.moto_id == moto_id,
+                MaintenanceHistory.mileage > mileage
+            ).delete()
 
         moto.model = model
         moto.years_create = year
@@ -253,20 +260,19 @@ def update_mileage():
                 "success": False,
                 "message": "Мотоцикл не найден"
             }), 404
-        
-        # Проверка на уменьшение пробега
-        if new_mileage < moto.mileage:
-            return jsonify({
-                "success": False,
-                "message": "Новый пробег не может быть меньше текущего"
-            }), 400
-            
+    
         # Проверка даты
         if mileage_date.date() > datetime.utcnow().date():
             return jsonify({
                 "success": False,
                 "message": "Дата не может быть в будущем"
             }), 400
+        
+        if new_mileage < moto.mileage:
+            MaintenanceHistory.query.filter(
+                MaintenanceHistory.moto_id == moto_id,
+                MaintenanceHistory.mileage > new_mileage
+            ).delete()
 
         # Обновляем данные
         moto.mileage = new_mileage
