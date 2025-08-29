@@ -245,9 +245,24 @@
                                 {% elif record.type == 'chain' %}⛓️
                                 {% else %}🔧{% endif %}
                             </div>
-                            <div class="history-details">
-                                <h4>{{ record.title }}</h4>
-                                <p>{{ record.moto_model }} • {{ record.date.strftime('%d.%m.%Y') }} • {{ record.notes }}</p>
+                            <div class="wrapper-record">
+                                <div class="history-details">
+                                    <h4>{{ record.title }}</h4>
+                                    <p>{{ record.moto_model }} • {{ record.date.strftime('%d.%m.%Y') }} • {{ record.notes }}</p>
+                                </div>
+                                <!-- Кнопки действий -->
+                                <div class="history-actions">
+                                    <button class="btn-action btn-edit" 
+                                            onclick="openEditModal({{ record.id }})"
+                                            title="Редактировать">
+                                        ✏️
+                                    </button>
+                                    <button class="btn-action btn-delete" 
+                                            onclick="openDeleteModal({{ record.id }})"
+                                            title="Удалить">
+                                        🗑️
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="history-meta">
@@ -259,8 +274,8 @@
                                 {% else %}
                                     <span class="cost">{{ record.cost }} ₽</span>
                                 {% endif %}
-
                             </div>
+
                             {% if record.image %}
                             <img src="{{ url_for('maintenance.maintenance_image', maintenance_id=record.id ) }}" class="history-image">
                             {% else %}
@@ -480,6 +495,102 @@
         </div>
     </div>
 
+    <!-- Модальное окно редактирования обслуживания -->
+    <div class="modal-overlay" id="editMainteanceModal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Редактировать обслуживание</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="editForm" class="modal-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" id="edit_id" name="maintenance_id">
+                
+                <div class="form-group">
+                    <label for="edit_moto">Мотоцикл</label>
+                    <select id="edit_moto" name="moto_id" required>
+                        <option value="{{ moto.id }}">{{ moto.model }}</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_service_type">Тип обслуживания</label>
+                    <select id="edit_service_type" name="service_type" required>
+                        <option value="">Выберите тип</option>
+                        <option value="Замена масляного фильтра">Замена масляного фильтра</option>
+                        <option value="Замена воздушного фильтра">Замена воздушного фильтра</option>
+                        <option value="Замена свечей зажигания">Замена свечей зажигания</option>
+                        <option value="Замена тормозной жидкости">Замена тормозной жидкости</option>
+                        <option value="Смазка цепи">Смазка цепи</option>
+                        <option value="Замена цепи">Замена цепи</option>
+                        <option value="Замена ремня">Замена ремня</option>
+                        <option value="Замена масла в кардане">Замена масла в кардане</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_mileage">Пробег (км)</label>
+                    <input type="number" id="edit_mileage" name="mileage" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_date">Дата</label>
+                    <input type="date" id="edit_date" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_cost">Стоимость (₽)</label>
+                    <input type="number" id="edit_cost" name="cost">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_notes">Примечания</label>
+                    <textarea id="edit_notes" name="notes" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Фото работы</label>
+                    <div class="photo-upload" id="edit_photo_upload">
+                        <div class="photo-upload-icon">📷</div>
+                        <div class="photo-upload-text">Изменить фото</div>
+                        <div class="photo-upload-hint">Нажмите для загрузки (макс. 2 МБ)</div>
+                    </div>
+                    <input type="file" id="edit_photo_input" name="maintenance_image" accept="image/*" style="display: none;">
+                    <img src="" alt="Предпросмотр" class="preview-photo" id="edit_photo_preview">
+                    <div id="edit_photo_error" style="color: red; display: none; margin-top: 5px;"></div>
+                    <div class="photo-actions">
+                        <button type="button" id="remove_photo" style="display: none;">Удалить фото</button>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal-overlay" id="deleteModal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Подтверждение удаления</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-inner">
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить эту запись обслуживания?</p>
+                    <p class="text-muted">Это действие нельзя отменить.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Удалить</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/static/js/burger-menu.js"></script>
     <script src="/static/js/moto.js"></script>
     <script>
@@ -493,6 +604,140 @@
         }
 
         document.querySelector('#date').value = formatDate();
+    </script>
+
+    <script>
+        let currentMaintenanceId = null;
+        // Функции для работы с модальными окнами
+        function openEditModal(maintenanceId) {
+            currentMaintenanceId = maintenanceId;
+            fetch(`/maintenance/edit_maintenance/${maintenanceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const maintenance = data.data;
+                        document.getElementById('edit_id').value = maintenance.id;
+                        document.getElementById('edit_moto').value = maintenance.moto_id;
+                        document.getElementById('edit_service_type').value = maintenance.service_type;
+                        document.getElementById('edit_mileage').value = maintenance.mileage;
+                        document.getElementById('edit_date').value = maintenance.date;
+                        document.getElementById('edit_cost').value = maintenance.cost || '';
+                        document.getElementById('edit_notes').value = maintenance.notes || '';
+                        
+                        // Показ превью если есть фото
+                        if (maintenance.has_image) {
+                            document.getElementById('edit_photo_preview').src = 
+                                `/maintenance/maintenance_image/${maintenanceId}`;
+                            document.getElementById('edit_photo_preview').style.display = 'block';
+                        }
+                        
+                        document.getElementById('editMainteanceModal').style.display = 'flex';
+                    } else {
+                        alert('Ошибка при загрузке данных');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ошибка при загрузке данных');
+                });
+        }
+
+        function openDeleteModal(maintenanceId) {
+            currentMaintenanceId = maintenanceId;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editMainteanceModal').style.display = 'none';
+            resetEditForm();
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentMaintenanceId = null;
+        }
+
+        function resetEditForm() {
+            document.getElementById('editForm').reset();
+            document.getElementById('edit_photo_preview').style.display = 'none';
+            document.getElementById('edit_photo_preview').src = '';
+            document.getElementById('remove_photo').style.display = 'none';
+        }
+
+        // Обработка формы редактирования
+        document.getElementById('editForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch(`/maintenance/edit_maintenance/${currentMaintenanceId}`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token() }}'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    closeEditModal();
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('Ошибка при обновлении данных');
+                console.error(error);
+            }
+        });
+
+        // Подтверждение удаления
+        document.getElementById('confirmDelete').addEventListener('click', async function() {
+            try {
+                const response = await fetch(`/maintenance/delete_maintenance/${currentMaintenanceId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    closeDeleteModal();
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('Ошибка при удалении');
+                console.error(error);
+            }
+        });
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Закрытие модальных окон
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal-overlay').style.display = 'none';
+                });
+            });
+            
+            // Закрытие по клику вне окна
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

@@ -138,6 +138,202 @@ def add_maintenance():
         except Exception as e:
             db.session.rollback()
             return jsonify({'success': False, 'message': f'Ошибка: {str(e)}'}), 400
+
+''' РЕДАКТИРОВАНИЕ ОБСУЛЖИВАНИЯ '''
+@maintenance_bp.route('/edit_maintenance/<int:maintenance_id>', methods=['GET', 'POST'])
+@login_required
+def edit_maintenance(maintenance_id):
+    if request.method == 'GET':
+        maintenance = MaintenanceHistory.query.filter_by(
+            id=maintenance_id,
+            owner_id=current_user.id
+        ).first_or_404()
+
+        return jsonify({
+            "success": True,
+            "data": {
+                "id": maintenance.id,
+                "moto_id": maintenance.moto_id,
+                "service_type": maintenance.service_type,
+                "mileage": maintenance.mileage,
+                "date": maintenance.date.strftime('%Y-%m-%d'),
+                "cost": maintenance.cost,
+                "notes": maintenance.notes,
+                "has_image": bool(maintenance.image)
+            }
+        })
+    
+    elif request.method == 'POST':
+        try:
+            maintenance = MaintenanceHistory.query.filter_by(
+                id=maintenance_id,
+                owner_id=current_user.id
+            ).first_or_404()
+
+            maintenance.service_type = request.form.get('service_type')
+            maintenance.mileage = int(request.form.get('mileage'))
+            maintenance.date = datetime.strptime(request.form.get('date'), '%Y-%m-%d')
+            maintenance.cost = int(request.form.get('cost')) if request.form.get('cost') else 0
+            maintenance.notes = request.form.get('notes')
+
+            image_file = request.files.get('maintenance_image')
+            if image_file and image_file.filename != '':
+                if image_file.content_length > 10 * 1024 * 1024:
+                    return jsonify({
+                        "success": False,
+                        "message": "Размер файла не должен превышать 10МБ"
+                    }), 400
+                maintenance.image = image_file.read()
+            
+            elements = ElementsFluid.query.filter_by(moto_id=maintenance.moto_id).first()
+            if elements:
+                service_mapping = {
+                    'Замена масляного фильтра': 'oil_filter',
+                    'Замена воздушного фильтра': 'air_filter',
+                    'Замена свечей зажигания': 'spark_plug',
+                    'Замена тормозной жидкости': 'brake_fluid',
+                    'Смазка цепи': 'drive_maintenance',
+                    'Замена цепи': 'drive_change',
+                    'Замена ремня': 'drive_change',
+                    'Обслуживание кардана': 'drive_maintenance',
+                    'Замена масла в кардане': 'drive_maintenance'
+                }
+
+                if maintenance.service_type in service_mapping:
+                    element = service_mapping[maintenance.service_type]
+
+                    setattr(elements, element, True)
+                    setattr(elements, f"{element}_date", maintenance.date)
+                    setattr(elements, f"{element}_mileage", maintenance.mileage)
+            
+            db.session.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Обслуживание успешно добавлено" 
+            })
+
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': f'Ошибка: {str(e)}'}), 400
+
+''' УДАЛЕНИЕ ОБСЛУЖИВАНИЯ '''
+''' УДАЛЕНИЕ ОБСЛУЖИВАНИЯ '''
+@maintenance_bp.route('/delete_maintenance/<int:maintenance_id>', methods=['DELETE'])
+@login_required
+def delete_maintenance(maintenance_id):
+    try:
+        # ПРАВИЛЬНО: все условия в одном словаре
+        maintenance = MaintenanceHistory.query.filter_by(
+            id=maintenance_id, 
+            owner_id=current_user.id
+        ).first()
+        
+        if not maintenance:
+            return jsonify({
+                "success": False, 
+                "message": "Запись обслуживания не найдена"
+            }), 404
+        
+        # Сохраняем данные для возможного отката элементов
+        moto_id = maintenance.moto_id
+        service_type = maintenance.service_type
+        
+        db.session.delete(maintenance)
+        
+        # Обновляем статус элемента, если это была последняя запись данного типа
+        elements = ElementsFluid.query.filter_by(moto_id=moto_id).first()
+        if elements:
+            service_mapping = {
+                'Замена масляного фильтра': 'oil_filter',
+                'Замена воздушного фильтра': 'air_filter',
+                'Замена свечей зажигания': 'spark_plug',
+                'Замена тормозной жидкости': 'brake_fluid',
+                'Смазка цепи': 'drive_maintenance',
+                'Замена цепи': 'drive_change',
+                'Замена ремня': 'drive_change',
+                'Обслуживание кардана': 'drive_maintenance',
+                'Замена масла в кардане': 'drive_maintenance'
+            }
+            
+            if service_type in service_mapping:
+                element = service_mapping[service_type]
+                # Проверяем, есть ли другие записи этого типа обслуживания
+                # ПРАВИЛЬНО: используем filter() для сложных условий
+                other_records = MaintenanceHistory.query.filter(
+                    MaintenanceHistory.moto_id == moto_id,
+                    MaintenanceHistory.service_type == service_type,
+                    MaintenanceHistory.id != maintenance_id
+                ).count()
+                
+                if other_records == 0:
+                    # Если это последняя запись, сбрасываем статус
+                    setattr(elements, element, False)
+                    setattr(elements, f"{element}_date", None)
+                    setattr(elements, f"{element}_mileage", 0)
+        
+        db.session.commit()
+        
+        return jsonify({
+            "success": True, 
+            "message": "Обслуживание успешно удалено"
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            "success": False, 
+            "message": f"Ошибка при удалении: {str(e)}"
+        }), 500
+    
+''' ПОЛУЧЕНИЕ ВСЕХ ЗАПИСЕЙ ОБСЛУЖИВАНИЯ '''
+@maintenance_bp.route("/get_maintenance_history", methods=['GET'])
+@login_required
+def get_maintenance_history():
+    try:
+        moto_id = request.args.get('moto_id')
+        page = request.args.get('page', 1, type=int)
+
+        per_page = 10
+
+        query = MaintenanceHistory.query.filter_by(owner_id=current_user.id)
+        if moto_id:
+            query = query.filter_by(moto_id=moto_id)
+        
+        maintenance_history = query.order_by(
+            MaintenanceHistory.date.desc()
+        ).paginate(page=page, per_page=per_page, error_out=False)
+
+        history_data = []
+        for maintenance in maintenance_history.items:
+            moto = Motorcycle.query.get(maintenance.moto_id)
+
+            history_data.append({
+                "id": maintenance.id,
+                "service_type": maintenance.service_type,
+                "moto_model": moto.model if moto else "Неизвестно",
+                "date": maintenance.date.strftime('%d.%m.%Y'),
+                "mileage": maintenance.mileage,
+                "cost": maintenance.cost,
+                "notes": maintenance.notes[:80] + "..." if maintenance.notes and len(maintenance.notes) > 80 else maintenance.notes,
+                "has_image": bool(maintenance.image)
+            })
+        
+        return jsonify({
+            "success": True,
+            "data": history_data,
+            "total": maintenance_history.total,
+            "pages": maintenance_history.pages,
+            "current_page": page
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": f"Ошибка при получении данных: {str(e)}"
+        }), 500
+
+            
         
 ''' ДОБАВЛЕНИЕ ПОСЛЕДНЕГО ОБСЛУЖИВАНИЯ МОТОЦИКЛА (КОМПЛЕКСНО) '''
 @maintenance_bp.route("/update_last_maintenance", methods=['POST'])
